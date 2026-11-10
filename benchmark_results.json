@@ -1,0 +1,302 @@
+[
+  {
+    "model": "qwen3.5:4b",
+    "question": "Comment s'appelle le cheval de Léo ?",
+    "kind": "fait",
+    "answer": "Le cheval de Léo s'appelle Éclair. C'est un cheval blanc comme la neige qui adore croquer des pommes rouges et sauter par-dessus les ruisseaux.",
+    "score": 1.0,
+    "seconds": 8.23,
+    "tokens": 38,
+    "tok_per_s": 6.9
+  },
+  {
+    "model": "qwen3.5:4b",
+    "question": "De quelle couleur est le cheval de Léo ?",
+    "kind": "fait",
+    "answer": "Le cheval de Léo s'appelle Éclair et il est blanc comme la neige. C'est un bel animal qui adore les pommes rouges et sauter par-dessus les ruisseaux !",
+    "score": 1.0,
+    "seconds": 7.26,
+    "tokens": 40,
+    "tok_per_s": 7.1
+  },
+  {
+    "model": "qwen3.5:4b",
+    "question": "Qu'y a-t-il dans le sac à dos de Léo ?",
+    "kind": "liste",
+    "answer": "Dans le sac à dos de Léo, il y a une gourde d'eau fraîche, deux grosses pommes pour Éclair, un carnet de dessin avec des crayons colorés et une loupe magique.",
+    "score": 1.0,
+    "seconds": 7.61,
+    "tokens": 43,
+    "tok_per_s": 7.2
+  },
+  {
+    "model": "qwen3.5:4b",
+    "question": "Qui est le méchant de l'histoire ?",
+    "kind": "fait",
+    "answer": "Dans cette histoire, le méchant est le Baron Grognon. Il est très coléreux et il a une grosse machine à vapeur qu'il aime beaucoup trop pour ne pas la faire mal aux autres.",
+    "score": 1.0,
+    "seconds": 41.8,
+    "tokens": 43,
+    "tok_per_s": 6.8
+  },
+  {
+    "model": "qwen3.5:4b",
+    "question": "Que fait la machine du Baron Grognon ?",
+    "kind": "fait",
+    "answer": "La machine à vapeur du Baron Grognon aspire toutes les jolies fleurs de la forêt pour les transformer en poussière grise et terne. Elle est censée rendre tout le lieu silencieux, triste et gris !",
+    "score": 1.0,
+    "seconds": 8.95,
+    "tokens": 47,
+    "tok_per_s": 6.3
+  },
+  {
+    "model": "qwen3.5:4b",
+    "question": "Combien d'écureuils attaquent la machine ?",
+    "kind": "fait",
+    "answer": "Une armée de vingt petits écureuils attaque la machine à vapeur avec des glands ronds pour la boucher.",
+    "score": 1.0,
+    "seconds": 17.91,
+    "tokens": 26,
+    "tok_per_s": 8.8
+  },
+  {
+    "model": "qwen3.5:4b",
+    "question": "Comment Léo arrête-t-il la machine à vapeur ?",
+    "kind": "raisonnement",
+    "answer": "Léo ne l'arrête pas directement avec ses mains. Il utilise une ruse : il fait venir des écureuils qui bouchent les trous de la machine avec des glands, ce qui la fait tousser et s'arrêter. Ensuite, Léo monte sur Éclair pour effrayer le Baron Grognon, qui glisse dans la boue et fait tomber son engin.",
+    "score": 1.0,
+    "seconds": 36.46,
+    "tokens": 86,
+    "tok_per_s": 8.9
+  },
+  {
+    "model": "qwen3.5:4b",
+    "question": "Que donne Léo au Baron à la fin ?",
+    "kind": "fait",
+    "answer": "À la fin de l'histoire, Léo donne une belle pomme rouge au Baron. Il lui propose cette pomme pour qu'il arrête de manger la poussière et prenne du bon goût !",
+    "score": 1.0,
+    "seconds": 31.06,
+    "tokens": 41,
+    "tok_per_s": 9.0
+  },
+  {
+    "model": "qwen3.5:4b",
+    "question": "Quel est le prénom de la mère de Léo ?",
+    "kind": "hors-sujet",
+    "answer": "L'histoire ne précise pas le prénom de la mère de Léo. On ne sait que c'est un jeune cavalier courageux, mais rien sur sa famille n'est dit dans les extraits.",
+    "score": 1.0,
+    "seconds": 22.01,
+    "tokens": 42,
+    "tok_per_s": 7.2
+  },
+  {
+    "model": "qwen3.5:4b",
+    "question": "Quel âge a Léo ?",
+    "kind": "hors-sujet",
+    "answer": "L'histoire ne précise pas l'âge exact de Léo, mais elle le décrit comme un jeune cavalier courageux qui part explorer la forêt avec son cheval Éclair.",
+    "score": 1.0,
+    "seconds": 21.29,
+    "tokens": 37,
+    "tok_per_s": 8.7
+  },
+  {
+    "model": "llama3.2:3b",
+    "question": "Comment s'appelle le cheval de Léo ?",
+    "kind": "fait",
+    "answer": "Le cheval de Léo s'appelle Éclair.",
+    "score": 1.0,
+    "seconds": 35.53,
+    "tokens": 13,
+    "tok_per_s": 6.9
+  },
+  {
+    "model": "llama3.2:3b",
+    "question": "De quelle couleur est le cheval de Léo ?",
+    "kind": "fait",
+    "answer": "Le cheval de Léo est blanc comme la neige.",
+    "score": 1.0,
+    "seconds": 28.02,
+    "tokens": 14,
+    "tok_per_s": 6.0
+  },
+  {
+    "model": "llama3.2:3b",
+    "question": "Qu'y a-t-il dans le sac à dos de Léo ?",
+    "kind": "liste",
+    "answer": "Il y a plusieurs choses dans le sac à dos de Léo :\n\n- Une gourde d'eau bien fraîche\n- Deux grosses pommes pour Éclair\n- Un carnet de dessin avec des crayons de toutes les couleurs\n- Et une loupe magique pour observer les petites bêtes.",
+    "score": 1.0,
+    "seconds": 38.33,
+    "tokens": 69,
+    "tok_per_s": 10.2
+  },
+  {
+    "model": "llama3.2:3b",
+    "question": "Qui est le méchant de l'histoire ?",
+    "kind": "fait",
+    "answer": "C'est le Baron Grognon ! Il est très en colère et veut contrôler la Forêt Enchantée.",
+    "score": 1.0,
+    "seconds": 30.11,
+    "tokens": 27,
+    "tok_per_s": 10.4
+  },
+  {
+    "model": "llama3.2:3b",
+    "question": "Que fait la machine du Baron Grognon ?",
+    "kind": "fait",
+    "answer": "La machine à vapeur du Baron Grognon aspire les fleurs et les transforme en poussière grise et terne.",
+    "score": 1.0,
+    "seconds": 28.34,
+    "tokens": 29,
+    "tok_per_s": 10.0
+  },
+  {
+    "model": "llama3.2:3b",
+    "question": "Combien d'écureuils attaquent la machine ?",
+    "kind": "fait",
+    "answer": "Vingt petits écureuils attaquent la machine avec des glands bien ronds !",
+    "score": 1.0,
+    "seconds": 14.48,
+    "tokens": 20,
+    "tok_per_s": 10.9
+  },
+  {
+    "model": "llama3.2:3b",
+    "question": "Comment Léo arrête-t-il la machine à vapeur ?",
+    "kind": "raisonnement",
+    "answer": "Léo arrête la machine à vapeur en faisant bombarder l'entrée de l'engin avec des glands ronds !",
+    "score": 0.5,
+    "seconds": 20.11,
+    "tokens": 29,
+    "tok_per_s": 10.2
+  },
+  {
+    "model": "llama3.2:3b",
+    "question": "Que donne Léo au Baron à la fin ?",
+    "kind": "fait",
+    "answer": "Léo donne au Baron une pomme !",
+    "score": 1.0,
+    "seconds": 25.38,
+    "tokens": 10,
+    "tok_per_s": 9.6
+  },
+  {
+    "model": "llama3.2:3b",
+    "question": "Quel est le prénom de la mère de Léo ?",
+    "kind": "hors-sujet",
+    "answer": "Je suis désolé, mais l'histoire ne précise pas le prénom de la mère de Léo.",
+    "score": 1.0,
+    "seconds": 19.54,
+    "tokens": 26,
+    "tok_per_s": 7.6
+  },
+  {
+    "model": "llama3.2:3b",
+    "question": "Quel âge a Léo ?",
+    "kind": "hors-sujet",
+    "answer": "Je ne trouve pas d'indication dans les extraits de l'histoire qui indique l'âge de Léo.",
+    "score": 0.0,
+    "seconds": 4.55,
+    "tokens": 28,
+    "tok_per_s": 7.8
+  },
+  {
+    "model": "gemma3:4b",
+    "question": "Comment s'appelle le cheval de Léo ?",
+    "kind": "fait",
+    "answer": "Le cheval de Léo s'appelle Éclair. Il est blanc comme la neige et il adore les pommes rouges !",
+    "score": 1.0,
+    "seconds": 35.58,
+    "tokens": 25,
+    "tok_per_s": 9.1
+  },
+  {
+    "model": "gemma3:4b",
+    "question": "De quelle couleur est le cheval de Léo ?",
+    "kind": "fait",
+    "answer": "Le cheval de Léo s'appelle Éclair et il est blanc comme la neige ! L'histoire dit que son cheval était blanc comme la neige.",
+    "score": 1.0,
+    "seconds": 31.75,
+    "tokens": 32,
+    "tok_per_s": 8.9
+  },
+  {
+    "model": "gemma3:4b",
+    "question": "Qu'y a-t-il dans le sac à dos de Léo ?",
+    "kind": "liste",
+    "answer": "L'histoire dit que Léo avait dans son sac à dos une gourde d'eau, deux pommes pour Éclair, un carnet de dessin, des crayons de toutes les couleurs et une loupe magique.",
+    "score": 1.0,
+    "seconds": 34.95,
+    "tokens": 46,
+    "tok_per_s": 9.0
+  },
+  {
+    "model": "gemma3:4b",
+    "question": "Qui est le méchant de l'histoire ?",
+    "kind": "fait",
+    "answer": "L'histoire dit que le Baron Grognon est le méchant. Il avait une machine à vapeur qu'il ne voulait pas que les autres touchent !",
+    "score": 1.0,
+    "seconds": 33.76,
+    "tokens": 34,
+    "tok_per_s": 9.1
+  },
+  {
+    "model": "gemma3:4b",
+    "question": "Que fait la machine du Baron Grognon ?",
+    "kind": "fait",
+    "answer": "La machine du Baron Grognon aspire toutes les jolies fleurs pour les transformer en poussière grise et terne !",
+    "score": 1.0,
+    "seconds": 33.08,
+    "tokens": 25,
+    "tok_per_s": 9.2
+  },
+  {
+    "model": "gemma3:4b",
+    "question": "Combien d'écureuils attaquent la machine ?",
+    "kind": "fait",
+    "answer": "L'histoire dit qu'il y avait vingt petits écureuils qui visaient le tuyau avec des glands !",
+    "score": 1.0,
+    "seconds": 19.79,
+    "tokens": 26,
+    "tok_per_s": 8.5
+  },
+  {
+    "model": "gemma3:4b",
+    "question": "Comment Léo arrête-t-il la machine à vapeur ?",
+    "kind": "raisonnement",
+    "answer": "Léo arrête la machine à vapeur en utilisant des écureuils qui la bombardent de glands ! Ça fait *Ploc ! Ploc ! Paf !* et ça la fait tousser et s'arrêter.",
+    "score": 1.0,
+    "seconds": 37.31,
+    "tokens": 45,
+    "tok_per_s": 8.0
+  },
+  {
+    "model": "gemma3:4b",
+    "question": "Que donne Léo au Baron à la fin ?",
+    "kind": "fait",
+    "answer": "Léo tend à Monsieur Grognon une belle pomme rouge avec un grand sourire.",
+    "score": 1.0,
+    "seconds": 33.19,
+    "tokens": 19,
+    "tok_per_s": 8.3
+  },
+  {
+    "model": "gemma3:4b",
+    "question": "Quel est le prénom de la mère de Léo ?",
+    "kind": "hors-sujet",
+    "answer": "L'histoire ne dit pas quel est le prénom de la mère de Léo. Elle parle seulement de Léo, le jeune cavalier.",
+    "score": 1.0,
+    "seconds": 20.1,
+    "tokens": 30,
+    "tok_per_s": 9.1
+  },
+  {
+    "model": "gemma3:4b",
+    "question": "Quel âge a Léo ?",
+    "kind": "hors-sujet",
+    "answer": "L'histoire ne précise pas l'âge de Léo. On sait seulement qu'il est un jeune cavalier courageux.",
+    "score": 1.0,
+    "seconds": 19.22,
+    "tokens": 28,
+    "tok_per_s": 9.0
+  }
+]
