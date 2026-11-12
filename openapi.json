@@ -1,0 +1,809 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "API Data - Détecteur de tendances (Givaudan)",
+    "description": "Score de durabilité des tendances émergentes (saveurs, parfumerie, actifs beauté, boissons), calculé à partir de Google Trends, Wikipedia, Google News et de signaux manuels (TikTok, Pinterest). Les données sont recalculées par `collect_trends.py`.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "système"
+        ],
+        "summary": "Health",
+        "description": "Vérifie que les données sont chargées.",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trends": {
+      "get": {
+        "tags": [
+          "tendances"
+        ],
+        "summary": "List Trends",
+        "description": "Liste des tendances, triées par score décroissant.",
+        "operationId": "list_trends_trends_get",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filtrer par univers",
+              "examples": [
+                "Beauté et actifs"
+              ],
+              "title": "Category"
+            },
+            "description": "Filtrer par univers"
+          },
+          {
+            "name": "stage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "émergente",
+                    "croissance",
+                    "plateau",
+                    "déclin",
+                    "inconnu"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filtrer par stade",
+              "title": "Stage"
+            },
+            "description": "Filtrer par stade"
+          },
+          {
+            "name": "min_score",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 0,
+              "description": "Score minimum",
+              "default": 0,
+              "title": "Min Score"
+            },
+            "description": "Score minimum"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TrendSummary"
+                  },
+                  "title": "Response List Trends Trends Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trends/{trend_id}": {
+      "get": {
+        "tags": [
+          "tendances"
+        ],
+        "summary": "Get Trend",
+        "description": "Détail d'une tendance, avec les sous-scores qui expliquent le score.",
+        "operationId": "get_trend_trends__trend_id__get",
+        "parameters": [
+          {
+            "name": "trend_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Trend Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendSummary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trends/{trend_id}/timeseries": {
+      "get": {
+        "tags": [
+          "tendances"
+        ],
+        "summary": "Get Timeseries",
+        "description": "Courbes mois par mois (pour les graphiques), une série par source.",
+        "operationId": "get_timeseries_trends__trend_id__timeseries_get",
+        "parameters": [
+          {
+            "name": "trend_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Trend Id"
+            }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "examples": [
+                "google_trends"
+              ],
+              "title": "Source"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeseriesPoint"
+                  },
+                  "title": "Response Get Timeseries Trends  Trend Id  Timeseries Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trends/score": {
+      "post": {
+        "tags": [
+          "tendances"
+        ],
+        "summary": "Score",
+        "description": "Score d'une tendance à partir de son nom : c'est l'appel principal pour l'application.",
+        "operationId": "score_trends_score_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScoreRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScoreResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Health": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "examples": [
+              "ok"
+            ]
+          },
+          "trends": {
+            "type": "integer",
+            "title": "Trends",
+            "description": "Nombre de tendances chargées",
+            "examples": [
+              20
+            ]
+          },
+          "collected_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Collected At",
+            "examples": [
+              "2026-11-12"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "trends"
+        ],
+        "title": "Health"
+      },
+      "ScoreRequest": {
+        "properties": {
+          "trend_name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Trend Name",
+            "description": "Nom de la tendance (casse et accents ignorés)",
+            "examples": [
+              "peptide serum"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "trend_name"
+        ],
+        "title": "ScoreRequest"
+      },
+      "ScoreResponse": {
+        "properties": {
+          "trend_name": {
+            "type": "string",
+            "title": "Trend Name",
+            "examples": [
+              "peptide serum"
+            ]
+          },
+          "score": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Score",
+            "examples": [
+              64
+            ]
+          },
+          "growth_5y": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Growth 5Y",
+            "examples": [
+              1173
+            ]
+          },
+          "source": {
+            "type": "string",
+            "title": "Source",
+            "description": "Sources utilisées, séparées par des points-virgules",
+            "examples": [
+              "Google Trends; Google News"
+            ]
+          },
+          "recommendation": {
+            "type": "string",
+            "title": "Recommendation",
+            "examples": [
+              "À surveiller : signal prometteur, à confirmer avec d'autres sources"
+            ]
+          },
+          "stage": {
+            "type": "string",
+            "enum": [
+              "émergente",
+              "croissance",
+              "plateau",
+              "déclin",
+              "inconnu"
+            ],
+            "title": "Stage",
+            "examples": [
+              "plateau"
+            ]
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "basse",
+              "moyenne",
+              "élevée"
+            ],
+            "title": "Confidence",
+            "examples": [
+              "moyenne"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "trend_name",
+          "score",
+          "source",
+          "recommendation",
+          "stage",
+          "confidence"
+        ],
+        "title": "ScoreResponse"
+      },
+      "TimeseriesPoint": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "title": "Source",
+            "examples": [
+              "Google Trends"
+            ]
+          },
+          "period": {
+            "type": "string",
+            "title": "Period",
+            "description": "Mois (AAAA-MM-JJ)",
+            "examples": [
+              "2026-10-01"
+            ]
+          },
+          "value": {
+            "type": "number",
+            "title": "Value",
+            "description": "Valeur brute de la source",
+            "examples": [
+              61.0
+            ]
+          },
+          "value_norm": {
+            "type": "number",
+            "title": "Value Norm",
+            "description": "Valeur ramenée à 100 pour le pic de la source",
+            "examples": [
+              61.0
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "source",
+          "period",
+          "value",
+          "value_norm"
+        ],
+        "title": "TimeseriesPoint"
+      },
+      "TrendSummary": {
+        "properties": {
+          "trend_id": {
+            "type": "string",
+            "title": "Trend Id",
+            "description": "Identifiant stable (sans accents ni espaces)",
+            "examples": [
+              "peptide_serum"
+            ]
+          },
+          "trend_name": {
+            "type": "string",
+            "title": "Trend Name",
+            "examples": [
+              "peptide serum"
+            ]
+          },
+          "category": {
+            "type": "string",
+            "title": "Category",
+            "description": "Univers Givaudan",
+            "examples": [
+              "Beauté et actifs"
+            ]
+          },
+          "score": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Score",
+            "description": "Score de durabilité : 40 % évolution, 30 % récurrence, 30 % diffusion",
+            "examples": [
+              64
+            ]
+          },
+          "growth_5y": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Growth 5Y",
+            "description": "Croissance en % entre le début et la fin de la série (5 ans)",
+            "examples": [
+              1173
+            ]
+          },
+          "growth_12m": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Growth 12M",
+            "description": "Croissance moyenne en % sur 12 mois, toutes sources",
+            "examples": [
+              41
+            ]
+          },
+          "evolution_score": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Evolution Score",
+            "description": "Sous-score : croissance 12 mois et 5 ans",
+            "examples": [
+              48
+            ]
+          },
+          "recurrence_score": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Recurrence Score",
+            "description": "Sous-score : durée passée au-dessus de 40 % du pic",
+            "examples": [
+              64
+            ]
+          },
+          "diffusion_score": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Diffusion Score",
+            "description": "Sous-score : sources en croissance et nombre de médias",
+            "examples": [
+              87
+            ]
+          },
+          "early_signal_score": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Early Signal Score",
+            "description": "Niveau récent des signaux précoces (TikTok, Pinterest), si disponibles",
+            "examples": [
+              72
+            ]
+          },
+          "stage": {
+            "type": "string",
+            "enum": [
+              "émergente",
+              "croissance",
+              "plateau",
+              "déclin",
+              "inconnu"
+            ],
+            "title": "Stage",
+            "description": "Stade du cycle de vie",
+            "examples": [
+              "plateau"
+            ]
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "basse",
+              "moyenne",
+              "élevée"
+            ],
+            "title": "Confidence",
+            "description": "Fiabilité selon le nombre de sources",
+            "examples": [
+              "moyenne"
+            ]
+          },
+          "sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Sources",
+            "description": "Sources utilisées",
+            "examples": [
+              [
+                "Google Trends",
+                "Google News"
+              ]
+            ]
+          },
+          "n_sources": {
+            "type": "integer",
+            "title": "N Sources",
+            "examples": [
+              2
+            ]
+          },
+          "news_articles_30d": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "News Articles 30D",
+            "description": "Articles de presse sur 30 jours",
+            "examples": [
+              10
+            ]
+          },
+          "news_publishers_30d": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "News Publishers 30D",
+            "description": "Médias distincts sur 30 jours",
+            "examples": [
+              10
+            ]
+          },
+          "news_articles_365d": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "News Articles 365D",
+            "description": "Articles de presse sur 12 mois (plafonné à 100)",
+            "examples": [
+              35
+            ]
+          },
+          "peak_period": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Peak Period",
+            "description": "Mois du pic (AAAA-MM-JJ)",
+            "examples": [
+              "2026-03-01"
+            ]
+          },
+          "data_points": {
+            "type": "integer",
+            "title": "Data Points",
+            "description": "Nombre de mois de données",
+            "examples": [
+              61
+            ]
+          },
+          "wiki_articles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Wiki Articles",
+            "description": "Articles Wikipedia utilisés (langue:titre)",
+            "examples": [
+              []
+            ]
+          },
+          "recommendation": {
+            "type": "string",
+            "title": "Recommendation",
+            "examples": [
+              "À surveiller : signal prometteur, à confirmer avec d'autres sources"
+            ]
+          },
+          "collected_at": {
+            "type": "string",
+            "title": "Collected At",
+            "description": "Date de la collecte",
+            "examples": [
+              "2026-11-12"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "trend_id",
+          "trend_name",
+          "category",
+          "score",
+          "evolution_score",
+          "recurrence_score",
+          "diffusion_score",
+          "stage",
+          "confidence",
+          "sources",
+          "n_sources",
+          "data_points",
+          "wiki_articles",
+          "recommendation",
+          "collected_at"
+        ],
+        "title": "TrendSummary"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
