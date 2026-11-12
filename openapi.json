@@ -288,10 +288,304 @@
           }
         }
       }
+    },
+    "/catalogue": {
+      "get": {
+        "tags": [
+          "catalogue (simulé)"
+        ],
+        "summary": "Get Catalogue",
+        "description": "Catalogue Givaudan SIMULÉ (environ 25 arômes) pour le prototype.",
+        "operationId": "get_catalogue_catalogue_get",
+        "parameters": [
+          {
+            "name": "famille",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Famille"
+            }
+          },
+          {
+            "name": "au_catalogue",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Au Catalogue"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Arome"
+                  },
+                  "title": "Response Get Catalogue Catalogue Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trends/{trend_id}/aromes": {
+      "get": {
+        "tags": [
+          "catalogue (simulé)"
+        ],
+        "summary": "Get Aromes",
+        "description": "Arôme Givaudan à utiliser pour une tendance, et alternatives si la matière est sous tension.",
+        "operationId": "get_aromes_trends__trend_id__aromes_get",
+        "parameters": [
+          {
+            "name": "trend_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Trend Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AromesTendance"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "Arome": {
+        "properties": {
+          "arome_id": {
+            "type": "string",
+            "title": "Arome Id",
+            "examples": [
+              "sudachi"
+            ]
+          },
+          "nom": {
+            "type": "string",
+            "title": "Nom",
+            "examples": [
+              "Arôme sudachi"
+            ]
+          },
+          "famille": {
+            "type": "string",
+            "title": "Famille",
+            "examples": [
+              "agrumes"
+            ]
+          },
+          "univers": {
+            "type": "string",
+            "title": "Univers"
+          },
+          "tendances": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tendances",
+            "description": "Tendances auxquelles l'arôme répond"
+          },
+          "au_catalogue": {
+            "type": "boolean",
+            "title": "Au Catalogue",
+            "description": "true : arôme existant (délai 1 mois) ; false : à développer (6 mois)"
+          },
+          "prix_kg_eur": {
+            "type": "number",
+            "title": "Prix Kg Eur"
+          },
+          "disponibilite": {
+            "type": "string",
+            "enum": [
+              "élevée",
+              "moyenne",
+              "faible"
+            ],
+            "title": "Disponibilite"
+          },
+          "delai_mois": {
+            "type": "integer",
+            "title": "Delai Mois"
+          },
+          "origine_matiere": {
+            "type": "string",
+            "title": "Origine Matiere"
+          },
+          "saisonnalite": {
+            "type": "string",
+            "title": "Saisonnalite"
+          },
+          "risque_recolte": {
+            "type": "string",
+            "enum": [
+              "faible",
+              "moyen",
+              "élevé"
+            ],
+            "title": "Risque Recolte"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "simule": {
+            "type": "boolean",
+            "title": "Simule",
+            "description": "Toujours true : le catalogue Givaudan est simulé pour le prototype",
+            "default": true
+          },
+          "score_faisabilite": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 100.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score Faisabilite",
+            "description": "50 % disponibilité, 30 % au catalogue, 20 % élan de la tendance liée"
+          }
+        },
+        "type": "object",
+        "required": [
+          "arome_id",
+          "nom",
+          "famille",
+          "univers",
+          "tendances",
+          "au_catalogue",
+          "prix_kg_eur",
+          "disponibilite",
+          "delai_mois",
+          "origine_matiere",
+          "saisonnalite",
+          "risque_recolte"
+        ],
+        "title": "Arome"
+      },
+      "AromesTendance": {
+        "properties": {
+          "trend_id": {
+            "type": "string",
+            "title": "Trend Id"
+          },
+          "arome_principal": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Arome"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "aromes_lies": {
+            "items": {
+              "$ref": "#/components/schemas/Arome"
+            },
+            "type": "array",
+            "title": "Aromes Lies"
+          },
+          "alternatives": {
+            "items": {
+              "$ref": "#/components/schemas/Arome"
+            },
+            "type": "array",
+            "title": "Alternatives",
+            "description": "Même famille aromatique, classées par faisabilité"
+          },
+          "matiere_sous_tension": {
+            "type": "boolean",
+            "title": "Matiere Sous Tension",
+            "description": "true si la matière principale est rare ou à risque de récolte"
+          },
+          "ia_recommandation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ia Recommandation"
+          }
+        },
+        "type": "object",
+        "required": [
+          "trend_id",
+          "arome_principal",
+          "aromes_lies",
+          "alternatives",
+          "matiere_sous_tension"
+        ],
+        "title": "AromesTendance"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -860,6 +1154,33 @@
             "examples": [
               "engouement sincère avec intention d'achat"
             ]
+          },
+          "ia_explication": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ia Explication",
+            "description": "Explication du score rédigée par l'IA locale (qwen2.5:7b, pré-calculée par ia_enrichir.py). L'IA n'a pas calculé le score.",
+            "examples": [
+              "L'intérêt pour le sudachi a été multiplié par neuf en cinq ans..."
+            ]
+          },
+          "ia_recommandation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ia Recommandation",
+            "description": "Recommandation d'arôme rédigée par l'IA locale, à partir du catalogue simulé"
           },
           "collected_at": {
             "type": "string",

@@ -65,7 +65,7 @@ KEYWORDS = [
     # Fruits et légumes
     dict(name="yuzu", category=FRUITS, wiki_fr="Yuzu", wiki_en="Yuzu", news_query="yuzu"),
     dict(name="sudachi", category=FRUITS, wiki_fr="Sudachi", wiki_en="Sudachi", news_query="sudachi agrume"),
-    dict(name="ube", category=FRUITS, wiki_fr=False, wiki_en="Ube", news_query="ube violet saveur"),
+    dict(name="ube", category=FRUITS, wiki_fr=False, wiki_en="Dioscorea alata", news_query="ube violet saveur"),  # « Ube » renvoyait vers l'entreprise UBE
     dict(name="pistache", category=FRUITS, wiki_fr="Pistache", wiki_en="Pistachio", news_query="pistache"),
     dict(name="calamansi", category=FRUITS, wiki_fr=None, wiki_en="Calamansi", news_query="calamansi"),
     dict(name="jackfruit", category=FRUITS, wiki_fr=None, wiki_en="Jackfruit", news_query="jackfruit"),

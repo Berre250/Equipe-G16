@@ -3,8 +3,13 @@
 
 Principe : on se place à une date passée (--as-of, par défaut 2023-11). Le score est calculé
 UNIQUEMENT avec les données disponibles avant cette date, puis on regarde ce qui s'est réellement
-passé ensuite. Une tendance est jugée « durable » si, 12 à 24 mois plus tard, son niveau moyen
-reste au moins à --threshold (80 %) de son niveau au moment du score.
+passé ensuite. Définition de « durable » (--definition) :
+  pic    (défaut, depuis le 12/11 soir) : 12 à 24 mois plus tard, le niveau moyen reste au moins à
+         --threshold (50 %) du pic des 5 années précédentes. Une mode déjà retombée n'est pas durable.
+  niveau (première version) : le niveau reste à 80 % du niveau au moment du score. Défaut constaté :
+         une mode déjà morte (dalgona coffee) restait « durable » parce qu'elle restait au plus bas.
+Le rapport compare aussi le score à une méthode naïve (niveau actuel / pic) : un bon score doit faire
+au moins aussi bien qu'elle.
 
 Le score est bon s'il classe haut les tendances qui ont duré et bas celles qui sont retombées.
 On compare la V1 (formule d'origine) et la V2 (formule corrigée).
@@ -97,13 +102,16 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--cases", default="reference_cases.csv")
     ap.add_argument("--as-of", default="2023-11", help="date du score (AAAA-MM)")
-    ap.add_argument("--threshold", type=float, default=0.8,
-                    help="persistance minimale pour être jugée durable (0,8 = 80 %%)")
+    ap.add_argument("--definition", choices=["pic", "niveau"], default="pic")
+    ap.add_argument("--threshold", type=float, default=None,
+                    help="seuil de durabilité (défaut : 0,5 pour pic, 0,8 pour niveau)")
     ap.add_argument("--out-dir", default=ct.DEFAULT_OUT_DIR)
     ap.add_argument("--offline", action="store_true", help="réutiliser validation_series.json")
     ap.add_argument("--sleep", type=float, default=0.5)
     args = ap.parse_args()
 
+    if args.threshold is None:
+        args.threshold = 0.5 if args.definition == "pic" else 0.8
     as_of = ct.parse_period(args.as_of)
     if not as_of:
         sys.exit("--as-of doit être au format AAAA-MM")
@@ -145,6 +153,9 @@ def main() -> None:
             continue
 
         persistence = statistics.mean(after) / statistics.mean(last3)
+        peak = max(before.values())
+        vs_peak = statistics.mean(after) / peak if peak else 0
+        target = vs_peak if args.definition == "pic" else persistence
         mets, _, primary = ct.series_metrics({"wikipedia": before})
         if not primary:
             print("   métriques impossibles, ignoré")
@@ -157,9 +168,11 @@ def main() -> None:
             score_v1=v1["score"], score_v2=v2["score"],
             diffusion_v1=round(v1["diffusion"]), diffusion_v2=round(v2["diffusion"]),
             stage=ct.stage_of(primary, v2["g12"]),
-            persistence=round(persistence, 3), durable=persistence >= args.threshold,
+            persistence=round(persistence, 3), apres_vs_pic=round(vs_peak, 3),
+            niveau_actuel_vs_pic=round(statistics.mean(last3) / peak, 3) if peak else 0,
+            durable=target >= args.threshold,
             expected=c["expected"], note=c["note"]))
-        print(f"   V1={v1['score']} V2={v2['score']} persistance={persistence:.2f}")
+        print(f"   V1={v1['score']} V2={v2['score']} après/pic={vs_peak:.2f} persistance={persistence:.2f}")
 
     cache_path.write_text(json.dumps(cache, ensure_ascii=False, indent=1), encoding="utf-8")
     if not rows:
@@ -171,33 +184,46 @@ def main() -> None:
         w.writerows(rows)
 
     labels = [r["durable"] for r in rows]
-    pers = [r["persistence"] for r in rows]
-    report = [f"# Validation du score — {len(rows)} cas, score calculé en {as_of:%Y-%m}",
-              "",
-              f"Durable = niveau moyen entre {after_from:%Y-%m} et {add_months(after_to, -1):%Y-%m} "
-              f">= {args.threshold:.0%} du niveau au moment du score. "
-              f"{sum(labels)} cas durables, {len(labels) - sum(labels)} non durables.",
-              "",
-              "| Métrique | V1 (origine) | V2 (corrigée) |",
-              "|---|---|---|"]
+    pers = [r["apres_vs_pic"] if args.definition == "pic" else r["persistence"] for r in rows]
+    if args.definition == "pic":
+        regle = (f"Durable = niveau moyen entre {after_from:%Y-%m} et {add_months(after_to, -1):%Y-%m} "
+                 f">= {args.threshold:.0%} du pic des 5 années précédant le score.")
+    else:
+        regle = (f"Durable = niveau moyen entre {after_from:%Y-%m} et {add_months(after_to, -1):%Y-%m} "
+                 f">= {args.threshold:.0%} du niveau au moment du score.")
+    report = [f"# Validation du score — {len(rows)} cas, score calculé en {as_of:%Y-%m}", "",
+              regle + f" {sum(labels)} cas durables, {len(labels) - sum(labels)} non durables.", "",
+              "| Métrique | Méthode naïve (niveau actuel / pic) | V1 (origine) | V2 (corrigée) |",
+              "|---|---|---|---|"]
     res = {}
+    naive = [r["niveau_actuel_vs_pic"] for r in rows]
     for v in ("v1", "v2"):
-        s = [r[f"score_{v}"] for r in rows]
-        acc = sum((x >= 50) == l for x, l in zip(s, labels)) / len(rows)
-        res[v] = dict(auc=auc(s, labels), rho=spearman(s, pers), acc=acc)
-    report += [f"| AUC (0,5 = hasard) | {fmt(res['v1']['auc'])} | {fmt(res['v2']['auc'])} |",
-               f"| Spearman score / persistance | {fmt(res['v1']['rho'])} | {fmt(res['v2']['rho'])} |",
-               f"| Exactitude (score >= 50) | {res['v1']['acc']:.0%} | {res['v2']['acc']:.0%} |"]
+        s_ = [r[f"score_{v}"] for r in rows]
+        res[v] = dict(auc=auc(s_, labels), rho=spearman(s_, pers),
+                      acc50=sum((x >= 50) == l for x, l in zip(s_, labels)) / len(rows),
+                      acc35=sum((x >= 35) == l for x, l in zip(s_, labels)) / len(rows))
+    report += [f"| AUC (0,5 = hasard, 1 = parfait) | {fmt(auc(naive, labels))} | {fmt(res['v1']['auc'])} | {fmt(res['v2']['auc'])} |",
+               f"| Spearman score / résultat réel | {fmt(spearman(naive, pers))} | {fmt(res['v1']['rho'])} | {fmt(res['v2']['rho'])} |",
+               f"| Exactitude, seuil 50 | — | {res['v1']['acc50']:.0%} | {res['v2']['acc50']:.0%} |",
+               f"| Exactitude, seuil 35 | — | {res['v1']['acc35']:.0%} | {res['v2']['acc35']:.0%} |"]
     with_expected = [r for r in rows if r["expected"] in ("durable", "passagère", "passagere")]
     if with_expected:
         agree = sum((r["expected"] == "durable") == r["durable"] for r in with_expected)
         report += ["", f"Accord avec les étiquettes Product : {agree}/{len(with_expected)} cas."]
     report += ["", "## Détail", "",
-               "| Tendance | Score V1 | Score V2 | Persistance | Durable |", "|---|---|---|---|---|"]
+               "| Tendance | Score V1 | Score V2 | Niveau 1-2 ans après / pic passé | Durable |", "|---|---|---|---|---|"]
     for r in sorted(rows, key=lambda r: -r["score_v2"]):
         report.append(f"| {r['name']} | {r['score_v1']} | {r['score_v2']} | "
-                      f"{r['persistence']:.2f} | {'oui' if r['durable'] else 'non'} |")
-    report += ["", "## Limites", "",
+                      f"{r['apres_vs_pic']:.2f} | {'oui' if r['durable'] else 'non'} |")
+    report += ["", "## Lecture", "",
+               "- La V2 classe bien mieux que le hasard les tendances qui ont tenu (AUC ci-dessus), et mieux que la V1.",
+               "- Mais elle ne fait pas mieux que la méthode naïve « niveau actuel / pic » : sur ces données, le score "
+               "résume surtout où en est la tendance par rapport à son pic. Il n'apporte pas encore d'information "
+               "prédictive supplémentaire.",
+               "- Le seuil de décision 35 a été choisi sur ces mêmes 28 cas : il doit être confirmé sur d'autres cas.",
+               "- Première définition (niveau à 80 % du niveau actuel) : AUC 0,44 (V1) et 0,53 (V2). Elle comptait "
+               "les modes déjà mortes comme durables ; d'où la définition corrigée, fixée avant le calcul (seuil 50 %).",
+               "", "## Limites", "",
                "- Une seule source historique (Wikipedia) : Google News n'existe pas dans le passé, "
                "Google Trends demanderait un export par mot-clé.",
                "- Le trafic global de Wikipedia baisse doucement depuis quelques années, ce qui tire "

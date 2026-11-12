@@ -1,0 +1,247 @@
+{
+ "pdrn": {
+  "explication": "La tendance PDRN dans l'univers de la beauté et des actifs montre une forte croissance avec un pic prévu pour septembre 2026. Bien que le score de durabilité soit modéré, les chiffres d'intérêt suggèrent une tendance à long terme. Cependant, la faible diffusion médiatique et le manque d'articles récents dans la presse font peser un doute sur sa pérennité.",
+  "recommandation": "Utilisez le Complexe peptides Givaudan pour répondre à cette tendance croissante. Si la matière est sous tension, envisagez de développer un nouveau complexe ou attendez l'arrivée du produit prévu en catalogue.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:16",
+  "hash": "20888adcde9f"
+ },
+ "ambroxan": {
+  "explication": "La tendance de l'ambroxan semble forte avec une croissance continue sur les dernières années. Cependant, son stade émergent et la date proche du pic d'intérêt suggèrent qu'il pourrait atteindre un niveau élevé de popularité rapidement. Les sources sont variées mais limitées, ce qui peut affecter l'exactitude des prévisions.",
+  "recommandation": "Utilisez l'ambroxan (ambre boisé) dès que possible car il est au catalogue et la disponibilité est élevée. Si la matière devient sous tension, développez un arôme alternatif ou attendez jusqu'à ce que l'ambroxan soit à nouveau disponible.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:19",
+  "hash": "bda89180c514"
+ },
+ "ube": {
+  "explication": "La tendance de l'ube a atteint son pic d'intérêt et continue à croître, mais au rythme ralenti. Avec une diffusion modérée et des sources limitées, la confiance dans les données est élevée. Cependant, le stade plateau suggère que cette tendance pourrait se stabiliser ou même décroitre.",
+  "recommandation": "Il est recommandé de développer l'arôme ube (igname violette) pour profiter du potentiel de croissance restant. Si la disponibilité et le coût sont des préoccupations, une alternative comme la patate douce rôtie pourrait être envisagée.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T23:17",
+  "hash": "db1841246c7e"
+ },
+ "peptide_serum": {
+  "explication": "La tendance du peptide serum a connu une croissance significative ces dernières années, mais elle se situe actuellement sur un plateau. Les sources et les médias ne montrent pas encore de forte diffusion, ce qui peut indiquer que la tendance pourrait s'essouffler. Cependant, l'intérêt persiste depuis 2026-03-01.",
+  "recommandation": "Utilisez le Complexe peptides (actif beauté) de Givaudan pour capitaliser sur cette tendance en croissance. Si la matière est sous tension, envisagez d'attendre ou de développer un nouvel arôme adaptatif.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:24",
+  "hash": "490eba572d0a"
+ },
+ "algues_nori": {
+  "explication": "La tendance des algues nori semble forte avec une croissance de l'intérêt importante sur les dernières années. Cependant, le pic d'intérêt est prévu pour 2025-03-01, ce qui indique que cette tendance pourrait être transitoire. La confiance des données est élevée grâce aux sources multiples et variées.",
+  "recommandation": "Utilisez l'arôme algue nori car il correspond à la tendance actuelle. En cas de tension sur la matière, envisagez d'utiliser le substitut umami marin (dashi) qui a une disponibilité plus élevée.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:25",
+  "hash": "8fb342891170"
+ },
+ "chili_crisp": {
+  "explication": "La chili crisp semble être une tendance croissante avec une forte croissance de l'intérêt sur les dernières années. Cependant, le stade émergent et la faible récurrence suggèrent qu'il pourrait ne pas durer longtemps. La diffusion est limitée, ce qui pourrait limiter sa popularité à long terme.",
+  "recommandation": "Utilisez l'arôme 'Arôme piment croustillant'. En cas de tension sur la matière première, envisagez le développement d'un arôme personnalisé ou attendez pour voir si cette tendance se confirme.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:27",
+  "hash": "d1d9885afa08"
+ },
+ "matcha": {
+  "explication": "La tendance du matcha semble en déclin selon les données, avec une croissance de l'intérêt qui a diminué de 27% sur un an. Bien que le pic d'intérêt soit prévu pour avril 2025, la confiance des données est élevée et indique une probabilité faible que cette tendance se maintienne à long terme.",
+  "recommandation": "Utilisez l'arôme thé vert en cas de tension sur les ressources. Si le matcha devient trop rare ou coûteux, développez un arôme pour hojicha ou attendez la disponibilité d'un autre arôme de matcha.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:29",
+  "hash": "6f1b7be3c3d1"
+ },
+ "hot_honey": {
+  "explication": "La tendance hot honey semble prometteuse avec une croissance significative sur les dernières années. Cependant, le stade émergent et la faible diffusion suggèrent que cette tendance pourrait encore se renforcer avant de devenir dominante. Les sources actuelles sont limitées, ce qui rend l'évaluation un peu incertaine.",
+  "recommandation": "Utilisez l'arôme miel pimenté existant pour capitaliser sur la croissance actuelle. Si la matière est sous tension, envisagez de développer un arôme similaire ou attendez que les conditions du marché s'améliorent.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:30",
+  "hash": "2d2d8d124c87"
+ },
+ "sudachi": {
+  "explication": "La tendance du sudachi semble forte avec une croissance de l'intérêt importante sur les dernières années. Cependant, le stade émergent et la faible diffusion suggèrent qu'il reste encore à développer cette tendance pour un impact durable. La disponibilité faible et le risque de récolte élevé font courir des risques financiers importants.",
+  "recommandation": "Développez l'arôme sudachi, mais prévoyez une augmentation du prix potentiel. En cas de sous-tension de la matière première, envisagez d'utiliser l'arôme bergamote comme alternative avec une disponibilité élevée et un coût plus bas.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:32",
+  "hash": "8a2d76026e9e"
+ },
+ "parfum_gourmand": {
+  "explication": "La tendance parfum gourmand a connu une croissance importante sur les cinq dernières années mais semble se stabiliser avec une légère baisse récente. Le pic d'intérêt prévu pour 2025 suggère que cette tendance pourrait encore avoir de la marge, mais le faible score de diffusion et l'atteinte du plateau indiquent qu'elle est probablement en phase tardive.",
+  "recommandation": "Utilisez l'arôme vanille Bourbon si possible. En cas de tension sur la matière première, optez pour la vanilline naturelle qui offre une meilleure disponibilité et faisabilité.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:33",
+  "hash": "4e23a8292ac7"
+ },
+ "vanille": {
+  "explication": "La tendance de l'intérêt pour la vanille semble se stabiliser avec une légère baisse récente. Cependant, le pic d'intérêt prévu pour décembre 2025 suggère que cette tendance pourrait encore croître temporairement. Les sources sont diverses et fiables.",
+  "recommandation": "Utilisez l'arôme vanille Bourbon car il est au catalogue et bien qu'il soit actuellement sous tension, la disponibilité devrait se stabiliser rapidement. En cas de tensions persistantes, envisagez d'utiliser la vanilline naturelle comme alternative, qui est plus abordable et facilement disponible.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:35",
+  "hash": "ef0952007797"
+ },
+ "pistache": {
+  "explication": "La tendance de l'intérêt pour la pistache semble être en déclin selon les données fournis. Le pic d'intérêt a été atteint en mars 2025 et le score de durabilité est bas, ce qui suggère que cette tendance pourrait ne pas se maintenir à long terme. Les alternatives proposées sont plus stables et moins risquées.",
+  "recommandation": "Utilisez l'arôme noisette torréfiée en priorité car il est disponible et moins coûteux. Si la matière première pour la pistache reste sous tension, développez un arôme de pistache synthétique ou attendez que les conditions se stabilisent.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:37",
+  "hash": "e97697ffe4aa"
+ },
+ "oud": {
+  "explication": "La tendance de l'oud semble se stabiliser selon les données, avec une croissance décroissante sur 5 ans et une légère baisse récente. Cependant, le pic d'intérêt prévu pour décembre 2025 suggère que cette tendance pourrait encore augmenter temporairement.",
+  "recommandation": "Utilisez l'Accord oud actuellement au catalogue, mais préparez-vous à potentiellement utiliser des alternatives comme l'Ambroxan si la matière est sous tension. Si nécessaire, développez un accord d'oud original pour sécuriser votre offre.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:38",
+  "hash": "77f41113e781"
+ },
+ "gochujang": {
+  "explication": "La tendance du gochujang semble en déclin selon les données. Bien que l'intérêt ait augmenté de 330% sur cinq ans, il a baissé de -20% sur un an, indiquant une possible récession. Le pic d'intérêt est passé et la diffusion médiatique est faible.",
+  "recommandation": "Utilisez l'arôme Givaudan correspondant (Arôme gochujang) car il est disponible et à faible risque de récolte. En cas de tension sur cette matière, envisagez d'utiliser le substitut Arôme piment croustillant comme alternative.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:40",
+  "hash": "a8d87cdeafbd"
+ },
+ "bbq_coreen": {
+  "explication": "La tendance BBQ coréen a connu une croissance significative sur les cinq dernières années (190%), mais elle se trouve actuellement dans une phase de déclin (-18% sur 12 mois), avec un pic d'intérêt prévu pour février 2026. Les données sont solides, ce qui permet une bonne estimation du stade actuel de la tendance.",
+  "recommandation": "Utilisez l'arôme piment croustillant car il est disponible et à un coût raisonnable. Si les stocks deviennent limités, envisagez le développement d'un arôme personnalisé pour répondre spécifiquement à cette tendance en pleine évolution.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:41",
+  "hash": "27ffbf1d4cb7"
+ },
+ "harissa": {
+  "explication": "La tendance de l'harissa semble en déclin selon les données. Bien que son intérêt ait augmenté sur 5 ans, il a diminué de manière significative ces derniers mois. Le pic d'intérêt est passé et la diffusion médiatique diminue. Cela suggère une tendance à court terme qui pourrait ne pas se maintenir.",
+  "recommandation": "Il serait préférable d'attendre avant d'intégrer un arôme de harissa dans le catalogue, compte tenu du déclin observé. Si la matière est sous tension, il vaudrait mieux développer une alternative originale.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:43",
+  "hash": "525fc87b78f9"
+ },
+ "hojicha": {
+  "explication": "La tendance hojicha a connu une croissance significative ces dernières années mais se trouve actuellement dans un stade de déclin. Le pic d'intérêt est passé et l'attention s'est déjà considérablement réduite, ce qui peut indiquer que la tendance est en phase descendante. Cependant, le score de durabilité reste faible, donc il n'y a pas encore de garantie qu'elle ne reviendra pas.",
+  "recommandation": "Il serait judicieux d'utiliser l'arôme thé hojicha à développer pour capitaliser sur la croissance passée. Si la matière est sous tension, on peut envisager l'alternative thé vert qui est plus abordable et déjà au catalogue.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:44",
+  "hash": "1334aab0bbb9"
+ },
+ "furikake": {
+  "explication": "La tendance du furikake est en déclin selon les données de Google Trends. Bien que l'intérêt ait augmenté de 330% sur cinq ans, il a diminué de -11% sur un an, indiquant une possible saturation ou une baisse d'intérêt. La faible diffusion dans la presse et le manque d'articles récents ne confirment pas cette tendance positive.",
+  "recommandation": "Utilisez l'arôme algue nori de Givaudan, qui est déjà au catalogue et a une disponibilité moyenne. Si la matière devient sous tension, envisagez de développer un arôme original ou attendez les signes d'une reprise de l'intérêt du furikake.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:46",
+  "hash": "5c50391bfc74"
+ },
+ "parfum_solide": {
+  "explication": "La tendance du parfum solide est en déclin avec une croissance négative sur 12 mois. Bien que l'intérêt ait augmenté de 59% sur cinq ans, la pente récente est négative, ce qui suggère qu'il pourrait être préférable d'attendre ou de développer une nouvelle tendance plus prometteuse.",
+  "recommandation": "Il serait judicieux d'utiliser l'accord cèdre pour le moment en raison de sa disponibilité élevée et de son coût relativement bas. Si la matière est sous tension, envisagez d'attendre ou de développer un nouvel accord.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:48",
+  "hash": "4b514533632f"
+ },
+ "bakuchiol": {
+  "explication": "La tendance du bakuchiol est en déclin depuis son pic d'intérêt en avril 2023. Bien que l'intérêt ait encore une croissance de 249 % sur cinq ans, il a diminué de -23 % au cours des douze derniers mois. Les sources disponibles sont limitées et montrent un pic d'intérêt récent, ce qui peut indiquer une tendance à la baisse.",
+  "recommandation": "Il est préférable d'attendre avant d'intégrer un arôme associé au bakuchiol dans vos produits. Si l'arôme est sous tension, il serait judicieux de développer un nouveau profil olfactif spécifique ou de rechercher une alternative plus stable.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:49",
+  "hash": "65042f5793da"
+ },
+ "miso": {
+  "explication": "La tendance miso semble stagner selon les données fournies. Bien que l'intérêt ait augmenté de 59% sur cinq ans, il a diminué de -16% sur un an, indiquant une possible saturation du marché. Le pic d'intérêt prévu pour février 2026 suggère qu'il pourrait y avoir une baisse à venir.",
+  "recommandation": "Utilisez l'arôme umami marin (dashi) car il est disponible et moins cher. En cas de tension sur la matière première, envisagez le développement d'un nouvel arôme ou attendez les tendances futures.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:50",
+  "hash": "fc48b68b7f73"
+ },
+ "kombucha": {
+  "explication": "La tendance du kombucha est en déclin selon les données, avec une croissance de l'intérêt qui a fortement baissé sur 12 mois. Cela suggère que le marché peut être saturé et qu'il vaut mieux se tourner vers d'autres arômes pour éviter un risque élevé.",
+  "recommandation": "Utilisez l'arôme thé vert, car il est disponible rapidement et à un coût raisonnable. Si la matière devient sous tension, envisagez le développement de l'arôme thé hojicha comme alternative.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:52",
+  "hash": "d22879d402a1"
+ },
+ "tahini": {
+  "explication": "La tendance du tahini semble en déclin selon les données de Google Trends. L'intérêt a baissé de 33% sur 12 mois, ce qui suggère que cette tendance pourrait ne pas durer. Le pic d'intérêt a été atteint fin août 2023, et la croissance historique est positive mais faible (56% sur 5 ans).",
+  "recommandation": "Utilisez l'arôme sésame grillé de Givaudan pour répondre à cette tendance. Si la matière devient sous tension, envisagez d'utiliser une alternative comme l'amande ou la noisette torréfiée, qui sont plus abordables et ont une bonne faisabilité.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:54",
+  "hash": "558feb76ea65"
+ },
+ "ceramides": {
+  "explication": "La tendance des ceramides dans l'univers de la beauté et des actifs est en déclin, avec une croissance passée mais une baisse récente. Le pic d'intérêt a été atteint en mars 2026, ce qui suggère que cette tendance pourrait se stabiliser ou même diminuer dans les prochains mois.",
+  "recommandation": "Il est recommandé de développer un arôme original associé aux ceramides pour répondre à la demande potentielle. Si la matière est sous tension, une alternative pourrait être d'utiliser des composants naturellement présents dans les huiles végétales connues pour leurs propriétés hydratantes.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:55",
+  "hash": "6352d486e353"
+ },
+ "surimi": {
+  "explication": "La tendance sur l'arôme du surimi est en déclin depuis plusieurs années. Google Trends montre une baisse de 23% sur cinq ans et -7% sur douze mois, indiquant que cette tendance n'est pas durable. Le pic d'intérêt a été atteint le 1er juin 2023.",
+  "recommandation": "Utilisez l'arôme umami marin (dashi) Givaudan car il est disponible et à un coût raisonnable. Si la matière devient sous tension, envisagez de développer une alternative ou d'attendre que les conditions se stabilisent.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:56",
+  "hash": "ef68357d45a2"
+ },
+ "yakitori": {
+  "explication": "La tendance yakitori semble être en déclin selon les données de Google Trends. L'intérêt a diminué de -18% sur 5 ans et -15% sur 12 mois, avec son pic d'intérêt passé en février 2026. Les sources sont limitées, ce qui réduit la confiance des données mais ne change pas le score.",
+  "recommandation": "Utilisez l'arôme fumé naturel de Givaudan pour répondre à une demande potentielle. Si la matière devient sous tension, développez un arôme alternatif ou attendez que la tendance se stabilise.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:58",
+  "hash": "531d0350a9a4"
+ },
+ "sauce_de_poisson": {
+  "explication": "La tendance de la sauce de poisson dans l'univers des produits de la mer a connu une forte déclinaison ces dernières années. Le pic d'intérêt est passé et l'attention s'est considérablement réduite, ce qui indique que cette tendance pourrait être en phase descendante. Les sources sont solides, ce qui renforce la confiance dans cette analyse.",
+  "recommandation": "Utilisez l'arôme umami marin (dashi) car il est disponible et moins coûteux. Si la matière devient rare, envisagez le développement d'un nouvel arôme ou attendez une stabilisation de la tendance.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T22:59",
+  "hash": "cdc0ff256a37"
+ },
+ "yuzu": {
+  "explication": "La tendance du yuzu semble en déclin depuis son pic d'intérêt en mai 2023. Les données montrent une croissance négative sur les cinq dernières années et les douze derniers mois, ce qui suggère que cette tendance pourrait ne pas être durable. La confiance des données est élevée grâce aux sources multiples comme Google Trends, Wikipedia et la presse.",
+  "recommandation": "Il serait préférable d'utiliser l'arôme bergamote en raison de sa disponibilité élevée et de son coût plus abordable. Si le yuzu reste sous tension, il faudrait envisager le développement d'un arôme yuzu ou attendre que la tendance se stabilise.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T23:01",
+  "hash": "9bbc85600825"
+ },
+ "niacinamide": {
+  "explication": "La niacinamide a connu une croissance significative ces dernières années mais son intérêt semble entrer dans une phase de déclin. Le pic d'intérêt est prévu pour mars 2026, après quoi l'attention pourrait diminuer rapidement.",
+  "recommandation": "Il serait judicieux de développer un arôme spécifique à la niacinamide car aucune correspondance n'est trouvée dans le catalogue simulé. Si la matière est sous tension, il faudrait envisager une alternative comme la nicotinamide ou d'autres actifs similaires.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T23:02",
+  "hash": "0dc03d012e03"
+ },
+ "calamansi": {
+  "explication": "La tendance du calamansi est en déclin avec une croissance négative sur les 12 derniers mois (-24 %), ce qui suggère que l'intérêt pour ce fruit pourrait diminuer. Le pic d'intérêt a été atteint récemment, en décembre 2023, et la faible diffusion dans les sources et médias (0 articles sur 30 jours) indique une faible actualité actuelle.",
+  "recommandation": "Il est recommandé de privilégier l'arôme bergamote pour sa disponibilité élevée et son coût plus abordable. Si la matière est sous tension, il serait judicieux d'en développer un arôme calamansi chez Givaudan ou de patienter jusqu'à une possible reprise de l'intérêt du marché.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T23:04",
+  "hash": "7a7faccdd072"
+ },
+ "adaptogenes": {
+  "explication": "La tendance des adaptogènes dans le secteur des boissons et du bien-être a connu une croissance significative sur 5 ans mais est en déclin depuis 12 mois. Le pic d'intérêt prévu pour août 2025 suggère que cette tendance pourrait connaître un regain, mais les sources actuelles sont limitées.",
+  "recommandation": "Il serait judicieux de développer un arôme original associé aux propriétés des adaptogènes. Si la matière est sous tension, envisager une alternative comme l'arôme d'échinacée pourrait être une solution temporaire.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T23:05",
+  "hash": "8a9311cea2bd"
+ },
+ "chocolat_de_dubai": {
+  "explication": "La tendance du chocolat de Dubaï semble en déclin selon les données fournies. L'intérêt a diminué de -79% sur 12 mois et le pic d'intérêt est passé, ce qui suggère que cette tendance pourrait ne pas être durable. Cependant, la croissance de l'intérêt sur 5 ans reste positive à 55%, indiquant une certaine stabilité dans l'avenir proche.",
+  "recommandation": "Utilisez l'arôme noisette torréfiée ou l'arôme amande, qui sont disponibles et moins coûteux. Si la matière première est sous tension, développez un arôme de chocolat de Dubai adaptatif ou attendez une stabilisation de cette tendance.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T23:07",
+  "hash": "22417940a34b"
+ },
+ "saveur_fumee": {
+  "explication": "La tendance de la saveur fumée se situe dans une phase de déclin depuis plusieurs années. Les données montrent que l'intérêt pour cette saveur a stagné et ne devrait pas connaître de croissance significative à court terme, ce qui suggère qu'il est préférable d'orienter les efforts vers des tendances en hausse.",
+  "recommandation": "Utilisez l'arôme fumé naturel Givaudan actuellement disponible. Si la matière devient sous tension, développez un arôme synthétique ou attendez une possible reprise de l'intérêt pour cette saveur.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T23:09",
+  "hash": "73d2cd181f38"
+ },
+ "conserves_de_poisson": {
+  "explication": "La tendance des conserves de poisson est en déclin avec une croissance négative sur 12 mois (-81 %), indiquant que cette tendance pourrait ne pas durer. Les sources actuelles sont limitées, ce qui réduit la confiance dans l'analyse.",
+  "recommandation": "Il serait préférable de développer un arôme original pour répondre à une éventuelle demande future. Si la matière est sous tension, il vaut mieux attendre les signes d'une reprise avant d'investir.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T23:10",
+  "hash": "e9d088c5856a"
+ },
+ "jackfruit": {
+  "explication": "La tendance du jackfruit semble en déclin depuis son pic d'intérêt en avril 2022. L'indice de croissance négatif sur les cinq dernières années et l'érosion récente (-22 % sur un an) suggèrent une perte d'intérêt des consommateurs. Les sources disponibles ne montrent aucune activité médiatique récente, ce qui conforte cette tendance.",
+  "recommandation": "Il est préférable de ne pas développer d'arôme jackfruit pour l'instant. En attendant une reprise de l'intérêt, il serait judicieux de surveiller les tendances et de développer un arôme alternative si la matière devient sous tension.",
+  "modele": "qwen2.5:7b",
+  "genere_le": "2026-11-12T23:11",
+  "hash": "b9a1e8880515"
+ }
+}

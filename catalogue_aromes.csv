@@ -1,0 +1,27 @@
+arome_id,nom,famille,univers,tendances,au_catalogue,prix_kg_eur,disponibilite,delai_mois,origine_matiere,saisonnalite,risque_recolte,note
+yuzu,Arôme yuzu,agrumes,Fruits et légumes,yuzu,oui,320,faible,1,Japon / Corée,octobre-décembre,élevé,Matière rare et chère : récolte courte
+sudachi,Arôme sudachi,agrumes,Fruits et légumes,sudachi,non,280,faible,6,Japon (Tokushima),août-octobre,élevé,À développer : agrume vert proche du yuzu
+calamansi,Arôme calamansi,agrumes,Fruits et légumes,calamansi,oui,95,moyenne,1,Philippines,toute l'année,moyen,
+bergamote,Arôme bergamote,agrumes,Parfumerie,yuzu;sudachi,oui,140,élevée,1,Italie (Calabre),novembre-mars,faible,Alternative classique aux agrumes asiatiques
+clementine,Arôme clémentine,agrumes,Fruits et légumes,yuzu;calamansi,oui,45,élevée,1,Espagne / Maroc,novembre-février,faible,
+ube,Arôme ube (igname violette),tubercules sucrés,Fruits et légumes,ube,non,110,moyenne,6,Philippines,toute l'année,moyen,À développer
+patate_douce,Arôme patate douce rôtie,tubercules sucrés,Fruits et légumes,ube,oui,38,élevée,1,États-Unis,toute l'année,faible,
+pistache,Arôme pistache grillée,fruits à coque,Fruits et légumes,pistache;chocolat_de_dubai,oui,210,faible,1,Iran / États-Unis,septembre-octobre,élevé,Tension sur la matière depuis le chocolat de Dubaï
+noisette,Arôme noisette torréfiée,fruits à coque,Ingrédients de cuisine,pistache;chocolat_de_dubai,oui,85,élevée,1,Turquie / Italie,août-septembre,moyen,
+amande,Arôme amande,fruits à coque,Ingrédients de cuisine,pistache,oui,60,élevée,1,États-Unis,toute l'année,faible,
+matcha,Arôme thé matcha,thés,Boissons et bien-être,matcha,oui,180,moyenne,1,Japon (Uji),mai-juin,moyen,
+hojicha,Arôme thé hojicha,thés,Boissons et bien-être,hojicha,non,150,moyenne,6,Japon,toute l'année,faible,À développer : thé torréfié
+the_vert,Arôme thé vert,thés,Boissons et bien-être,matcha;hojicha;kombucha,oui,55,élevée,1,Chine / Japon,toute l'année,faible,
+vanille,Arôme vanille Bourbon,vanille,Parfumerie,vanille;parfum_gourmand,oui,450,faible,1,Madagascar,juin-août,élevé,Prix très volatils
+vanilline_bio,Vanilline naturelle (fermentation),vanille,Parfumerie,vanille;parfum_gourmand,oui,90,élevée,1,Biotechnologie,toute l'année,faible,Alternative stable à la vanille Bourbon
+oud,Accord oud,boisés,Parfumerie,oud,oui,600,faible,1,Asie du Sud-Est,toute l'année,élevé,Bois d'agar rare
+ambroxan,Ambroxan (ambre boisé),ambrés,Parfumerie,ambroxan;oud,oui,120,élevée,1,Synthèse,toute l'année,faible,Molécule de synthèse disponible
+cedre,Accord cèdre,boisés,Parfumerie,oud;parfum_solide,oui,70,élevée,1,Amérique du Nord,toute l'année,faible,
+miel_epice,Arôme miel pimenté,épicés sucrés,Ingrédients de cuisine,hot_honey,non,65,élevée,6,Europe,toute l'année,faible,À développer
+piment_croustillant,Arôme piment croustillant,épicés,Saveurs grillées,chili_crisp;gochujang;bbq_coreen,oui,48,élevée,1,Chine,toute l'année,faible,
+gochujang,Arôme gochujang (piment fermenté),épicés,Saveurs grillées,gochujang;bbq_coreen,oui,52,élevée,1,Corée du Sud,toute l'année,faible,
+fume,Arôme fumé naturel,fumés,Saveurs grillées,saveur_fumee;yakitori;bbq_coreen,oui,40,élevée,1,Europe,toute l'année,faible,
+nori,Arôme algue nori,umami marin,Produits de la mer,algues_nori;furikake,oui,75,moyenne,1,Japon / Corée,toute l'année,moyen,
+umami_marin,Arôme umami marin (dashi),umami marin,Produits de la mer,algues_nori;surimi;sauce_de_poisson;miso,oui,58,élevée,1,Japon,toute l'année,faible,
+sesame,Arôme sésame grillé,fruits à coque,Ingrédients de cuisine,tahini;furikake,oui,42,élevée,1,Éthiopie / Inde,toute l'année,faible,
+peptides_actif,Complexe peptides (actif beauté),actifs beauté,Beauté et actifs,peptide_serum;pdrn,oui,900,moyenne,1,Biotechnologie,toute l'année,faible,

@@ -22,6 +22,7 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field
 
+import catalogue as cg
 import collect_trends as ct
 
 DATA_DIR = Path(os.getenv("TRENDS_DIR", Path(__file__).resolve().parent / "resultats"))
@@ -71,6 +72,11 @@ class TrendSummary(BaseModel):
     tiktok_intention_pct: int | None = Field(None, description="Part des commentaires avec intention d'achat ou "
                                              "d'essai (%)", examples=[21])
     tiktok_verdict: str | None = Field(None, examples=["engouement sincère avec intention d'achat"])
+    ia_explication: str | None = Field(None, description="Explication du score rédigée par l'IA locale "
+                                       "(qwen2.5:7b, pré-calculée par ia_enrichir.py). L'IA n'a pas calculé le score.",
+                                       examples=["L'intérêt pour le sudachi a été multiplié par neuf en cinq ans..."])
+    ia_recommandation: str | None = Field(None, description="Recommandation d'arôme rédigée par l'IA locale, "
+                                          "à partir du catalogue simulé")
     collected_at: str = Field(description="Date de la collecte", examples=["2026-11-12"])
 
 
@@ -148,7 +154,9 @@ def _trend(r: dict) -> TrendSummary:
         recommendation=r["recommendation"], collected_at=r["collected_at"],
         tiktok_comments=_int(r.get("tiktok_comments")), tiktok_authenticity=_int(r.get("tiktok_authenticity")),
         tiktok_moquerie_pct=_int(r.get("tiktok_moquerie_pct")),
-        tiktok_intention_pct=_int(r.get("tiktok_intention_pct")), tiktok_verdict=r.get("tiktok_verdict") or None)
+        tiktok_intention_pct=_int(r.get("tiktok_intention_pct")), tiktok_verdict=r.get("tiktok_verdict") or None,
+        ia_explication=cg.load_ia(DATA_DIR).get(r["trend_id"], {}).get("explication"),
+        ia_recommandation=cg.load_ia(DATA_DIR).get(r["trend_id"], {}).get("recommandation"))
 
 
 def _find(name: str) -> TrendSummary:
@@ -244,6 +252,55 @@ def score(req: ScoreRequest):
                          source="; ".join(t.sources), recommendation=t.recommendation,
                          stage=t.stage, confidence=t.confidence,
                          tiktok_authenticity=t.tiktok_authenticity, tiktok_verdict=t.tiktok_verdict)
+
+
+class Arome(BaseModel):
+    arome_id: str = Field(examples=["sudachi"])
+    nom: str = Field(examples=["Arôme sudachi"])
+    famille: str = Field(examples=["agrumes"])
+    univers: str
+    tendances: list[str] = Field(description="Tendances auxquelles l'arôme répond")
+    au_catalogue: bool = Field(description="true : arôme existant (délai 1 mois) ; false : à développer (6 mois)")
+    prix_kg_eur: float
+    disponibilite: Literal["élevée", "moyenne", "faible"]
+    delai_mois: int
+    origine_matiere: str
+    saisonnalite: str
+    risque_recolte: Literal["faible", "moyen", "élevé"]
+    note: str | None = None
+    simule: bool = Field(True, description="Toujours true : le catalogue Givaudan est simulé pour le prototype")
+    score_faisabilite: int | None = Field(None, ge=0, le=100, description="50 % disponibilité, 30 % au catalogue, "
+                                          "20 % élan de la tendance liée")
+
+
+class AromesTendance(BaseModel):
+    trend_id: str
+    arome_principal: Arome | None
+    aromes_lies: list[Arome]
+    alternatives: list[Arome] = Field(description="Même famille aromatique, classées par faisabilité")
+    matiere_sous_tension: bool = Field(description="true si la matière principale est rare ou à risque de récolte")
+    ia_recommandation: str | None = None
+
+
+@app.get("/catalogue", response_model=list[Arome], tags=["catalogue (simulé)"])
+def get_catalogue(famille: str | None = None, au_catalogue: bool | None = None):
+    """Catalogue Givaudan SIMULÉ (environ 25 arômes) pour le prototype."""
+    rows = cg.load_catalogue()
+    if famille:
+        rows = [a for a in rows if a["famille"] == famille]
+    if au_catalogue is not None:
+        rows = [a for a in rows if a["au_catalogue"] == au_catalogue]
+    return rows
+
+
+@app.get("/trends/{trend_id}/aromes", response_model=AromesTendance, tags=["catalogue (simulé)"])
+def get_aromes(trend_id: str):
+    """Arôme Givaudan à utiliser pour une tendance, et alternatives si la matière est sous tension."""
+    t = _find(trend_id)
+    scores = {r["trend_id"]: _int(r["score"]) or 0 for r in _read("trends_summary.csv")}
+    res = cg.aromes_for_trend(t.trend_id, scores)
+    res["ia_recommandation"] = cg.load_ia(DATA_DIR).get(t.trend_id, {}).get("recommandation")
+    return res
 
 
 if __name__ == "__main__":

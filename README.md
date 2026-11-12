@@ -13,6 +13,9 @@ durabilité de 0 à 100**, un **stade** (émergente, croissance, plateau, décli
 | `trends_api.py` | API FastAPI qui lit `resultats/` (port 8001, Swagger sur `/docs`). Collecte à la demande les tendances inconnues. |
 | `openapi.json` | Contrat d'interface pour Tech, généré par `python trends_api.py --export-openapi openapi.json`. |
 | `comment_analyzer.py` | Classe les commentaires TikTok (appréciation, moquerie, intention d'achat…) avec un LLM local. Écrit `resultats/tiktok_signals.csv`. |
+| `ia_enrichir.py` | **IA locale** (`qwen2.5:7b` via Ollama) : rédige pour chaque tendance l'explication du score et la recommandation d'arôme. Écrit `resultats/ia_enrichissement.json`. |
+| `catalogue_aromes.csv`, `catalogue.py` | Catalogue Givaudan **simulé** (26 arômes : prix, disponibilité, délai, risque de récolte) et choix de l'arôme et des alternatives pour une tendance. |
+| `exporter_radar.py` | Exporte tout dans `resultats/radar.json` (tendances, courbes, textes de l'IA, arômes, catalogue) pour le prototype Tech, sans serveur. |
 | `validate_score.py` | Validation du score sur les 30 cas de `reference_cases.csv` et comparaison V1 / V2. |
 | `reference_cases.csv` | Les 30 cas de référence. La colonne `expected` est à remplir avec Product (`durable` / `passagère`). |
 | `google_trends/` | Courbes Google Trends (exports manuels et cache automatique). |
@@ -30,9 +33,11 @@ ollama pull qwen2.5:7b                 # LLM local pour les commentaires (une se
 
 python comment_analyzer.py             # 1. commentaires TikTok de tiktok_comments/ -> resultats/tiktok_signals.csv
 python collect_trends.py               # 2. collecte + score (intègre les commentaires) -> resultats/
-python trends_api.py                   # 3. API sur http://127.0.0.1:8001 (Swagger)
-python validate_score.py               # 4. validation du score -> resultats/validation_report.md
-python comment_analyzer.py --validate labels.csv --baseline   # 5. validation des commentaires (V1/V2)
+python ia_enrichir.py                  # 3. IA locale : explications et recommandations (20 à 30 min sans GPU)
+python exporter_radar.py               # 4. resultats/radar.json pour le prototype
+python trends_api.py                   # 5. API sur http://127.0.0.1:8001 (Swagger)
+python validate_score.py               # 6. validation du score -> resultats/validation_report.md
+python comment_analyzer.py --validate labels.csv --baseline   # 7. validation des commentaires (V1/V2)
 ```
 
 L'étape 1 est facultative : sans commentaires, le score et l'API fonctionnent normalement.
@@ -96,6 +101,29 @@ production, Givaudan devrait passer par un fournisseur de données sous licence.
 **Ollama sur un autre disque (ex. E:)** : `installer_ollama_E.bat` installe Ollama dans `E:\ollama\app`
 (`OllamaSetup.exe /DIR=...`) et ses modèles dans `E:\ollama\models` (`OLLAMA_MODELS`).
 
+## Pour le prototype Tech
+
+- **Sans serveur (recommandé pour la démo)** : lire
+  `https://raw.githubusercontent.com/Berre250/Equipe-G16/main/resultats/radar.json`.
+  Pour chaque tendance : `score`, `stage`, sous-scores, `sources`, `courbes` (mois par mois, 0-100),
+  `ia.explication`, `ia.recommandation`, `aromes.arome_principal`, `aromes.alternatives`,
+  `aromes.matiere_sous_tension`. Le bloc `meta` dit ce qui est réel, simulé ou généré par l'IA.
+- **Avec l'API** : `GET /trends`, `GET /trends/{id}`, `GET /trends/{id}/timeseries`,
+  `GET /trends/{id}/aromes`, `GET /catalogue`, `POST /trends/score` (voir `openapi.json`).
+
+## Rôle de l'IA
+
+| Usage | Script | Ce que fait l'IA | Ce qu'elle ne fait pas |
+|---|---|---|---|
+| Expliquer une tendance | `ia_enrichir.py` | Rédige en 2-3 phrases pourquoi la tendance va durer ou non, à partir des vrais chiffres | Elle ne calcule pas le score (formule vérifiable) et n'invente pas de chiffre |
+| Recommander un arôme | `ia_enrichir.py` | Choisit l'arôme du catalogue et l'alternative si la matière est rare | Les données du catalogue sont simulées |
+| Lire les commentaires TikTok (extension, hors MVP) | `comment_analyzer.py` | Distingue appréciation, moquerie et intention d'achat | Pas encore de vrais commentaires analysés |
+| Assistant en langage courant | `api.py` (Amir) | Répond aux questions à partir des fiches | Fiches à régénérer depuis `trends_summary.csv` |
+
+Le modèle tourne **en local** (Ollama, `qwen2.5:7b`) : aucune donnée ne sort du poste. Sans carte
+graphique il faut 20 à 40 s par tendance, donc les textes sont **pré-calculés après chaque collecte**
+et lus instantanément ensuite.
+
 ## Le score
 
 Score = 0,4 × évolution (croissance sur 12 mois et sur 5 ans) + 0,3 × récurrence (temps passé
@@ -108,14 +136,39 @@ La V1 reste disponible (`compute_score(..., version="v1")`) pour la comparaison 
 
 ## Validation
 
-`validate_score.py` se place en novembre 2023 : il calcule le score avec les seules données
-disponibles à cette date, puis regarde si la tendance a tenu 12 à 24 mois plus tard (niveau
-≥ 80 % du niveau de départ). Il mesure l'AUC, la corrélation de Spearman et l'exactitude, pour la V1
-et la V2. Les séries téléchargées sont gardées dans `resultats/validation_series.json` :
+`validate_score.py` se place en novembre 2023, calcule le score avec les seules données disponibles à
+cette date, puis regarde si la tendance a tenu. **Définition retenue** (fixée avant le calcul) : la
+tendance est durable si, 12 à 24 mois plus tard, son niveau reste à au moins 50 % de son pic passé.
+
+| Métrique (28 cas) | Méthode naïve | V1 | V2 |
+|---|---|---|---|
+| AUC | 0,90 | 0,84 | **0,90** |
+| Spearman | 0,82 | 0,59 | 0,68 |
+| Exactitude, seuil 35 | — | 71 % | **79 %** |
+
+Lecture honnête : la V2 fait nettement mieux que le hasard et que la V1, mais **pas mieux qu'une méthode
+naïve** (niveau actuel / pic). Le score résume bien où en est une tendance dans son cycle ; il ne prédit
+pas encore au-delà. La première définition (niveau à 80 % du niveau actuel) donnait une AUC de 0,53 :
+elle comptait les modes déjà mortes (dalgona coffee) comme durables. Détail : `resultats/validation_report.md`.
 `python validate_score.py --offline` refait le calcul à l'identique sans réseau.
 
-Limites : une seule source historique (Wikipedia), trafic Wikipedia en légère baisse générale,
-pages vues ≠ ventes, 30 cas choisis à la main.
+## Limites et biais
+
+- **Couverture** : Google Trends en France uniquement ; Wikipedia fr + en ; Google News fr. Pas d'Asie
+  ni des États-Unis, alors que beaucoup de tendances (yuzu, ube) y naissent.
+- **Mesure** : les recherches et les pages vues mesurent la curiosité, pas les ventes ni les lancements.
+  Google Trends est un indice relatif (0-100), pas un volume.
+- **Biais de sélection** : 35 tendances et 30 cas de référence choisis à la main, plutôt des tendances
+  déjà connues.
+- **Validation** : une seule source historique (Wikipedia), trafic Wikipedia en baisse générale, tendances
+  saisonnières (pumpkin spice latte) mal gérées ; le seuil 35 est calibré sur les mêmes 28 cas.
+- **Ambiguïté des mots-clés** : « Ube » renvoyait vers l'entreprise japonaise UBE (corrigé : Dioscorea alata) ;
+  7 tendances sans article Wikipedia fiable sont calculées sans cette source.
+- **Réseaux sociaux** : TikTok et Instagram n'ont pas d'API ouverte (réservée aux chercheurs) ; l'analyse
+  des commentaires est un prototype hors MVP.
+- **Simulé** : le catalogue Givaudan (prix, disponibilité, délais) est fictif.
+- **IA** : textes générés par un modèle de 7 milliards de paramètres ; ils reprennent les chiffres fournis
+  mais doivent être relus avant tout usage client.
 
 ---
 
