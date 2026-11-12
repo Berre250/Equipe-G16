@@ -1,112 +1,369 @@
-L'AVENTURE MAGIQUE DE LÉO ET ÉCLAIR
+RADAR DE TENDANCES GIVAUDAN : FICHES DE TENDANCES
 
-Chapitre 1 : Le Grand Départ
+Ce document rassemble les fiches des tendances suivies par la brique Data pour l'équipe marketing et consumer insights de Givaudan. Chaque fiche donne le score de durabilité d'une tendance, son stade, ses sources et une recommandation. Les données ont été collectées le 2026-11-12.
 
-Il était une fois un jeune cavalier courageux nommé Léo. Léo avait un grand chapeau de paille pour se protéger du soleil et un cheval blanc comme la neige qui s'appelait Éclair. Éclair était le cheval le plus gentil du monde : il adorait croquer des pommes rouges et savait sauter par-dessus les petits ruisseaux sans jamais mouiller ses sabots.
+Chapitre 1 : Comment lire le score de durabilité
 
-Ce matin-là, le soleil brillait comme une grosse orange dans le ciel. Léo attacha son sac à dos sur la selle d'Éclair. À l'intérieur, il avait mis :
-- Une gourde d'eau bien fraîche,
-- Deux grosses pommes pour Éclair,
-- Un carnet de dessin avec des crayons de toutes les couleurs,
-- Et une loupe magique pour observer les petites bêtes.
+Le score de durabilité va de 0 à 100. Il estime si une tendance a des chances de durer ou si elle n'est qu'un buzz passager. Plus il est haut, plus la tendance paraît durable. Il est calculé par la brique Data à partir des données, pas par l'IA : il peut être vérifié.
 
-« En route, Éclair ! » dit Léo en souriant. « Aujourd'hui, nous partons explorer la Forêt Enchantée ! »
+Le score combine trois critères : l'évolution pèse 40 %, la récurrence 30 % et la diffusion 30 %. L'évolution mesure la croissance de l'intérêt sur 12 mois et sur 5 ans. La récurrence mesure la durée pendant laquelle l'intérêt reste au-dessus de 40 % de son pic. La diffusion mesure combien de sources montent en même temps, et dans combien de médias différents la tendance apparaît sur 30 jours.
 
-Éclair hennit joyeusement, fit tinter sa petite clochette et partit au trot sur le chemin fleuri.
+Chapitre 2 : Les stades d'une tendance
 
----
+Une tendance émergente est en forte croissance mais encore loin de son pic, ou elle repart après un ancien pic. Une tendance en croissance monte fortement et reste proche de son niveau maximal. Une tendance en plateau est stable, sans forte hausse ni forte baisse. Une tendance en déclin perd de l'intérêt : sa baisse récente est nette ou elle est tombée sous la moitié de son pic.
 
-Chapitre 2 : Les Merveilles de la Nature
+La confiance indique la fiabilité des données : élevée avec au moins 3 sources, moyenne avec 2 sources, basse avec 1 source.
 
-La Forêt Enchantée était un endroit extraordinaire. Dès qu'ils entrèrent sous les grands arbres feuillus, l'air devint frais et doux.
+Chapitre 3 : Limites des données
 
-Léo mit pied à terre pour marcher à côté de son ami. Grâce à sa loupe, il découvrit des merveilles que personne ne prenait le temps de regarder :
+Les sources automatiques sont Google Trends, Wikipedia et Google News. Google Trends donne un indice relatif de 0 à 100, pas des volumes de recherche réels, avec un biais possible vers les pays anglophones. Wikipedia mesure la curiosité du public, pas les ventes ni les lancements de produits. TikTok et Instagram sont peu accessibles, et les signaux TikTok et Pinterest sont relevés à la main quand ils existent. Les données internes de Givaudan sont simulées. Le score reste en cours de validation et ne prédit pas avec certitude la durabilité d'une tendance.
 
-1. **Les Champignons Musiciens** : de petits champignons violets qui faisaient un joli tintement de cloche quand une goutte de rosée tombait dessus : *Dling, dlong !*
-2. **L'Arbre aux Papillons Dorés** : un grand chêne habité par des centaines de papillons brillants qui s'envolaient tous ensemble en formant un grand feu d'artifice silencieux.
-3. **Le Ruisseau aux Galets Arc-en-ciel** : une eau si claire et pure qu'on pouvait voir nager des petits poissons argentés qui faisaient des bulles en forme de cœur.
+Chapitre 4 : PDRN
 
-Léo s'assit dans l'herbe moelleuse et sortit son carnet pour dessiner tout ce qu'il voyait. Éclair, lui, grignotait des trèfles avec délices. Tout était paisible et joyeux.
+PDRN (univers : Beauté et actifs). Score de durabilité : 67/100. Stade : croissance. Confiance des données : moyenne.
 
----
+Évolution : +1835 % sur 5 ans et +227 % sur 12 mois. Pic d'intérêt en septembre 2026. Sous-scores : évolution 68/100, récurrence 73/100, diffusion 60/100.
 
-Chapitre 3 : Un Mystère dans la Clairière
+Sources : Google Trends, Google News. Presse : 0 articles sur 30 jours, dans 0 médias différents.
 
-Mais soudain, un bruit étrange retentit un peu plus loin.
-*CRAC ! BOUM ! POUF !*
+Recommandation : À surveiller : signal prometteur, à confirmer avec d'autres sources.
 
-Les petits écureuils roux dégringolèrent des branches, affolés, et vinrent se cacher derrière les bottes de Léo. Même les papillons dorés cessèrent de voler.
+Chapitre 5 : peptide serum
 
-« Ne vous inquiétez pas, petits amis, » chuchota Léo en caressant la queue touffue d'un écureuil. « Je vais aller voir ce qui se passe. »
+peptide serum (univers : Beauté et actifs). Score de durabilité : 64/100. Stade : plateau. Confiance des données : moyenne.
 
-Léo remonta sur le dos d'Éclair et avança doucement, sans faire de bruit avec les sabots. 
+Évolution : +1173 % sur 5 ans et +41 % sur 12 mois. Pic d'intérêt en mars 2026. Sous-scores : évolution 47/100, récurrence 64/100, diffusion 87/100.
 
-Au milieu d'une clairière, il découvrit le responsable de tout ce vacarme : le Baron Grognon !
+Sources : Google Trends, Google News. Presse : 10 articles sur 30 jours, dans 10 médias différents.
 
-Le Baron Grognon portait un manteau gris tout triste et de grosses bottes lourdes. Il avait un caractère affreux et détestait les couleurs, les rires et les fleurs. Il tenait dans ses mains une grosse machine à vapeur en ferraille qui aspirait toutes les jolies fleurs pour les transformer en poussière grise et terne !
+Recommandation : À surveiller : signal prometteur, à confirmer avec d'autres sources.
 
-« Hi hi hi ! » ricanait le Baron Grognon. « Quand j'aurai tout aspiré, la forêt sera toute grise, silencieuse et triste, exactement comme je l'aime ! »
+Chapitre 6 : ambroxan
 
-« Oh non ! » pensa Léo. « Il va abîmer la maison des animaux et voler toute la beauté de la forêt. Il faut l'arrêter ! »
+ambroxan (univers : Parfumerie). Score de durabilité : 58/100. Stade : émergente. Confiance des données : élevée.
 
----
+Évolution : +497 % sur 5 ans et +273 % sur 12 mois. Pic d'intérêt en août 2026. Sous-scores : évolution 51/100, récurrence 56/100, diffusion 68/100.
 
-Chapitre 4 : La Ruse de Léo
+Sources : Google Trends, Wikipedia, Google News. Presse : 3 articles sur 30 jours, dans 3 médias différents.
 
-Léo ne voulait pas se battre avec des épées méchantes. Il préférait utiliser son intelligence et l'aide de ses amis de la forêt.
+Recommandation : À surveiller : signal prometteur, à confirmer avec d'autres sources.
 
-Il se pencha vers l'oreille d'Éclair et lui chuchota un plan secret.
+Chapitre 7 : ube
 
-D'abord, Léo appela les écureuils et leur donna une mission :
-« Visez le gros tuyau de la machine avec des glands bien ronds ! »
+ube (univers : Fruits et légumes). Score de durabilité : 55/100. Stade : croissance. Confiance des données : élevée.
 
-Aussitôt, une armée de vingt petits écureuils commença à bombarder la machine à vapeur. 
-*Ploc ! Ploc ! Paf !* 
-Les glands bouchèrent l'entrée d'air de l'engin, qui se mit à tousser : *Prout... pfiouuuu... tic-tac !*
+Évolution : +482 % sur 5 ans et +52 % sur 12 mois. Pic d'intérêt en septembre 2026. Sous-scores : évolution 36/100, récurrence 73/100, diffusion 63/100.
 
-Le Baron Grognon devint rouge de colère : « Qui ose toucher à ma belle machine grise ?! »
+Sources : Google Trends, Wikipedia, Google News. Presse : 1 articles sur 30 jours, dans 1 médias différents.
 
-C'est à ce moment-là que Léo entra en scène. Monté sur Éclair, il surgit au grand galop en poussant un cri joyeux :
-« Par ici, Monsieur Grognon ! »
+Recommandation : À surveiller : signal prometteur, à confirmer avec d'autres sources.
 
-Éclair fit un saut magnifique par-dessus un buisson d'orties. Furieux, le Baron Grognon voulut courir après eux, mais il ne regarda pas où il mettait ses gros pieds.
+Chapitre 8 : algues nori
 
-*FLOUCH !*
+algues nori (univers : Produits de la mer). Score de durabilité : 52/100. Stade : émergente. Confiance des données : élevée.
 
-Le Baron glissa sur une plaque de boue très glissante et atterrit les fesses les premières au milieu d'un grand tas de feuilles mortes très douces, mais pleines de pollen jaune vif !
+Évolution : +512 % sur 5 ans et +250 % sur 12 mois. Pic d'intérêt en mars 2025. Sous-scores : évolution 50/100, récurrence 52/100, diffusion 54/100.
 
-Sa machine à vapeur s'arrêta dans un dernier petit nuage de fumée qui sentait la guimauve brûlée.
+Sources : Google Trends, Wikipedia, Google News. Presse : 9 articles sur 30 jours, dans 9 médias différents.
 
----
+Recommandation : À surveiller : signal prometteur, à confirmer avec d'autres sources.
 
-Chapitre 5 : Une Forêt Plus Belle que Jamais
+Chapitre 9 : hot honey
 
-Le Baron Grognon était assis dans les feuilles, couvert de poudre jaune de la tête aux pieds, avec une feuille collée sur le bout du nez. Il avait l'air tellement ridicule qu'il en resta bouche bée.
+hot honey (univers : Ingrédients de cuisine). Score de durabilité : 51/100. Stade : émergente. Confiance des données : moyenne.
 
-Léo s'approcha tranquillement sur son cheval, descendit de selle et lui tendit une de ses belles pommes rouges avec un grand sourire.
+Évolution : +736 % sur 5 ans et +283 % sur 12 mois. Pic d'intérêt en février 2026. Sous-scores : évolution 57/100, récurrence 33/100, diffusion 63/100.
 
-« Tenez, prenez une pomme, Monsieur le Baron. C'est bien meilleur que la poussière grise, et ça donne le sourire ! »
+Sources : Google Trends, Google News. Presse : 1 articles sur 30 jours, dans 1 médias différents.
 
-Le Baron regarda la pomme brillante, puis le jeune cavalier, et enfin les petits animaux qui le regardaient avec de grands yeux curieux. Pour la première fois depuis très longtemps, une odeur sucrée chatouilla ses narines. Il croqua dans la pomme.
+Recommandation : À surveiller : signal prometteur, à confirmer avec d'autres sources.
 
-*CRUNCH !*
+Chapitre 10 : chili crisp
 
-« C'est... c'est très bon, en fait, » marmonna le Baron en rougissant un peu sous sa poudre jaune. 
+chili crisp (univers : Saveurs grillées). Score de durabilité : 45/100. Stade : émergente. Confiance des données : élevée.
 
-« La nature n'est pas faite pour être détruite, » lui expliqua gentiment Léo. « Si vous en prenez soin, elle vous donnera les plus beaux spectacles du monde. »
+Évolution : +719 % sur 5 ans et +343 % sur 12 mois. Pic d'intérêt en novembre 2026. Sous-scores : évolution 59/100, récurrence 34/100, diffusion 38/100.
 
-Le Baron Grognon promit de ne plus jamais recommencer. Pour se faire pardonner, il utilisa sa charrette pour aider les animaux à ramasser les brindilles pour l'hiver, et il apprit même à chanter avec les oiseaux.
+Sources : Google Trends, Wikipedia, Google News. Presse : 5 articles sur 30 jours, dans 3 médias différents.
 
----
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
 
-Chapitre 6 : Le Coucher de Soleil
+Chapitre 11 : matcha
 
-Le soir venu, le ciel se teinta de rose, d'orange et d'or. La Forêt Enchantée était sauvée et plus resplendissante que jamais.
+matcha (univers : Boissons et bien-être). Score de durabilité : 44/100. Stade : déclin. Confiance des données : élevée.
 
-Léo donna la deuxième pomme à Éclair, qui la croqua avec bonheur en frottant son museau contre la joue de son jeune maître.
+Évolution : +286 % sur 5 ans et −27 % sur 12 mois. Pic d'intérêt en avril 2025. Sous-scores : évolution 22/100, récurrence 76/100, diffusion 40/100.
 
-Léo s'installa une dernière fois au pied d'un grand arbre bienveillant, ouvrit son carnet et dessina le Baron avec sa feuille sur le nez, entouré d'écureuils rieurs. En dessous, il écrivit :
+Sources : Google Trends, Wikipedia, Google News. Presse : 51 articles sur 30 jours, dans 41 médias différents.
 
-*« Rien n'est plus fort que la gentillesse et la beauté de la nature. Demain, de nouveaux chemins nous attendent ! »*
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
 
-Puis, bercé par le chant des grillons et le murmure du ruisseau magique, le petit cavalier s'endormit paisiblement sous les étoiles, prêt pour sa prochaine aventure.
+Chapitre 12 : sudachi
+
+sudachi (univers : Fruits et légumes). Score de durabilité : 38/100. Stade : émergente. Confiance des données : élevée.
+
+Évolution : +839 % sur 5 ans et +46 % sur 12 mois. Pic d'intérêt en octobre 2024. Sous-scores : évolution 43/100, récurrence 39/100, diffusion 30/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 0 articles sur 30 jours, dans 0 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 13 : parfum gourmand
+
+parfum gourmand (univers : Parfumerie). Score de durabilité : 38/100. Stade : plateau. Confiance des données : moyenne.
+
+Évolution : +611 % sur 5 ans et −11 % sur 12 mois. Pic d'intérêt en novembre 2025. Sous-scores : évolution 32/100, récurrence 61/100, diffusion 21/100.
+
+Sources : Google Trends, Google News. Presse : 10 articles sur 30 jours, dans 8 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 14 : pistache
+
+pistache (univers : Fruits et légumes). Score de durabilité : 37/100. Stade : déclin. Confiance des données : élevée.
+
+Évolution : +48 % sur 5 ans et −21 % sur 12 mois. Pic d'intérêt en mars 2025. Sous-scores : évolution 6/100, récurrence 73/100, diffusion 40/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 19 articles sur 30 jours, dans 16 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 15 : vanille
+
+vanille (univers : Parfumerie). Score de durabilité : 37/100. Stade : plateau. Confiance des données : élevée.
+
+Évolution : +19 % sur 5 ans et −6 % sur 12 mois. Pic d'intérêt en décembre 2025. Sous-scores : évolution 3/100, récurrence 80/100, diffusion 40/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 17 articles sur 30 jours, dans 15 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 16 : oud
+
+oud (univers : Parfumerie). Score de durabilité : 33/100. Stade : plateau. Confiance des données : élevée.
+
+Évolution : +132 % sur 5 ans et −9 % sur 12 mois. Pic d'intérêt en décembre 2025. Sous-scores : évolution 14/100, récurrence 75/100, diffusion 16/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 9 articles sur 30 jours, dans 6 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 17 : gochujang
+
+gochujang (univers : Saveurs grillées). Score de durabilité : 32/100. Stade : plateau. Confiance des données : élevée.
+
+Évolution : +335 % sur 5 ans et −20 % sur 12 mois. Pic d'intérêt en février 2026. Sous-scores : évolution 24/100, récurrence 73/100, diffusion 3/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 1 articles sur 30 jours, dans 1 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 18 : BBQ coréen
+
+BBQ coréen (univers : Saveurs grillées). Score de durabilité : 29/100. Stade : déclin. Confiance des données : élevée.
+
+Évolution : +195 % sur 5 ans et −18 % sur 12 mois. Pic d'intérêt en février 2026. Sous-scores : évolution 18/100, récurrence 54/100, diffusion 19/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 11 articles sur 30 jours, dans 7 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 19 : harissa
+
+harissa (univers : Ingrédients de cuisine). Score de durabilité : 29/100. Stade : déclin. Confiance des données : élevée.
+
+Évolution : +28 % sur 5 ans et −23 % sur 12 mois. Pic d'intérêt en septembre 2024. Sous-scores : évolution 4/100, récurrence 60/100, diffusion 29/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 12 articles sur 30 jours, dans 11 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 20 : hojicha
+
+hojicha (univers : Boissons et bien-être). Score de durabilité : 29/100. Stade : déclin. Confiance des données : élevée.
+
+Évolution : +489 % sur 5 ans et +3 % sur 12 mois. Pic d'intérêt en juin 2024. Sous-scores : évolution 30/100, récurrence 46/100, diffusion 11/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 5 articles sur 30 jours, dans 4 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 21 : bakuchiol
+
+bakuchiol (univers : Beauté et actifs). Score de durabilité : 28/100. Stade : déclin. Confiance des données : élevée.
+
+Évolution : +249 % sur 5 ans et −23 % sur 12 mois. Pic d'intérêt en avril 2023. Sous-scores : évolution 21/100, récurrence 54/100, diffusion 13/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 9 articles sur 30 jours, dans 5 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 22 : miso
+
+miso (univers : Ingrédients de cuisine). Score de durabilité : 27/100. Stade : plateau. Confiance des données : élevée.
+
+Évolution : +62 % sur 5 ans et −15 % sur 12 mois. Pic d'intérêt en février 2026. Sous-scores : évolution 8/100, récurrence 66/100, diffusion 13/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 11 articles sur 30 jours, dans 5 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 23 : furikake
+
+furikake (univers : Ingrédients de cuisine). Score de durabilité : 27/100. Stade : déclin. Confiance des données : élevée.
+
+Évolution : +320 % sur 5 ans et −11 % sur 12 mois. Pic d'intérêt en mars 2025. Sous-scores : évolution 24/100, récurrence 59/100, diffusion 0/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 0 articles sur 30 jours, dans 0 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 24 : parfum solide
+
+parfum solide (univers : Parfumerie). Score de durabilité : 27/100. Stade : déclin. Confiance des données : moyenne.
+
+Évolution : +58 % sur 5 ans et −37 % sur 12 mois. Pic d'intérêt en décembre 2025. Sous-scores : évolution 8/100, récurrence 55/100, diffusion 27/100.
+
+Sources : Google Trends, Google News. Presse : 15 articles sur 30 jours, dans 10 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 25 : kombucha
+
+kombucha (univers : Boissons et bien-être). Score de durabilité : 26/100. Stade : déclin. Confiance des données : élevée.
+
+Évolution : +142 % sur 5 ans et −54 % sur 12 mois. Pic d'intérêt en mai 2025. Sous-scores : évolution 15/100, récurrence 30/100, diffusion 37/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 17 articles sur 30 jours, dans 14 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 26 : tahini
+
+tahini (univers : Ingrédients de cuisine). Score de durabilité : 25/100. Stade : déclin. Confiance des données : élevée.
+
+Évolution : +59 % sur 5 ans et −32 % sur 12 mois. Pic d'intérêt en août 2023. Sous-scores : évolution 8/100, récurrence 61/100, diffusion 11/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 7 articles sur 30 jours, dans 4 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 27 : ceramides
+
+ceramides (univers : Beauté et actifs). Score de durabilité : 25/100. Stade : déclin. Confiance des données : élevée.
+
+Évolution : +215 % sur 5 ans et −31 % sur 12 mois. Pic d'intérêt en mars 2026. Sous-scores : évolution 19/100, récurrence 35/100, diffusion 24/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 10 articles sur 30 jours, dans 9 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 28 : surimi
+
+surimi (univers : Produits de la mer). Score de durabilité : 23/100. Stade : déclin. Confiance des données : élevée.
+
+Évolution : −24 % sur 5 ans et −8 % sur 12 mois. Pic d'intérêt en juin 2023. Sous-scores : évolution 0/100, récurrence 58/100, diffusion 19/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 10 articles sur 30 jours, dans 7 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 29 : sauce de poisson
+
+sauce de poisson (univers : Produits de la mer). Score de durabilité : 23/100. Stade : déclin. Confiance des données : élevée.
+
+Évolution : −36 % sur 5 ans et −13 % sur 12 mois. Pic d'intérêt en décembre 2022. Sous-scores : évolution 0/100, récurrence 55/100, diffusion 21/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 24 articles sur 30 jours, dans 8 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 30 : yakitori
+
+yakitori (univers : Saveurs grillées). Score de durabilité : 22/100. Stade : déclin. Confiance des données : élevée.
+
+Évolution : −18 % sur 5 ans et −15 % sur 12 mois. Pic d'intérêt en février 2026. Sous-scores : évolution 0/100, récurrence 69/100, diffusion 3/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 1 articles sur 30 jours, dans 1 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 31 : niacinamide
+
+niacinamide (univers : Beauté et actifs). Score de durabilité : 22/100. Stade : déclin. Confiance des données : élevée.
+
+Évolution : +99 % sur 5 ans et −42 % sur 12 mois. Pic d'intérêt en mars 2026. Sous-scores : évolution 11/100, récurrence 29/100, diffusion 29/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 12 articles sur 30 jours, dans 11 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 32 : yuzu
+
+yuzu (univers : Fruits et légumes). Score de durabilité : 21/100. Stade : déclin. Confiance des données : élevée.
+
+Évolution : −33 % sur 5 ans et −20 % sur 12 mois. Pic d'intérêt en mai 2023. Sous-scores : évolution 0/100, récurrence 39/100, diffusion 29/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 13 articles sur 30 jours, dans 11 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 33 : calamansi
+
+calamansi (univers : Fruits et légumes). Score de durabilité : 19/100. Stade : déclin. Confiance des données : élevée.
+
+Évolution : +123 % sur 5 ans et −24 % sur 12 mois. Pic d'intérêt en décembre 2023. Sous-scores : évolution 13/100, récurrence 45/100, diffusion 0/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 0 articles sur 30 jours, dans 0 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 34 : adaptogènes
+
+adaptogènes (univers : Boissons et bien-être). Score de durabilité : 15/100. Stade : déclin. Confiance des données : élevée.
+
+Évolution : +198 % sur 5 ans et −60 % sur 12 mois. Pic d'intérêt en août 2025. Sous-scores : évolution 18/100, récurrence 25/100, diffusion 3/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 1 articles sur 30 jours, dans 1 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 35 : saveur fumée
+
+saveur fumée (univers : Saveurs grillées). Score de durabilité : 12/100. Stade : déclin. Confiance des données : moyenne.
+
+Évolution : +0 % sur 5 ans et +0 % sur 12 mois. Pic d'intérêt en janvier 2025. Sous-scores : évolution 0/100, récurrence 2/100, diffusion 37/100.
+
+Sources : Google Trends, Google News. Presse : 20 articles sur 30 jours, dans 14 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant. Attention : le volume de recherche est trop faible pour conclure, ce score est peu fiable.
+
+Chapitre 36 : chocolat de Dubaï
+
+chocolat de Dubaï (univers : Ingrédients de cuisine). Score de durabilité : 12/100. Stade : déclin. Confiance des données : élevée.
+
+Évolution : +55 % sur 5 ans et −79 % sur 12 mois. Pic d'intérêt en avril 2025. Sous-scores : évolution 7/100, récurrence 7/100, diffusion 24/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 11 articles sur 30 jours, dans 9 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 37 : conserves de poisson
+
+conserves de poisson (univers : Produits de la mer). Score de durabilité : 10/100. Stade : déclin. Confiance des données : moyenne.
+
+Évolution : +120 % sur 5 ans et −81 % sur 12 mois. Pic d'intérêt en mai 2025. Sous-scores : évolution 13/100, récurrence 7/100, diffusion 8/100.
+
+Sources : Google Trends, Google News. Presse : 4 articles sur 30 jours, dans 3 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
+
+Chapitre 38 : jackfruit
+
+jackfruit (univers : Fruits et légumes). Score de durabilité : 7/100. Stade : déclin. Confiance des données : élevée.
+
+Évolution : −3 % sur 5 ans et −22 % sur 12 mois. Pic d'intérêt en avril 2022. Sous-scores : évolution 0/100, récurrence 23/100, diffusion 0/100.
+
+Sources : Google Trends, Wikipedia, Google News. Presse : 0 articles sur 30 jours, dans 0 médias différents.
+
+Recommandation : Signal faible : pas de lancement de produit pour l'instant.
