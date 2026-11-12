@@ -27,3 +27,8 @@ resultats/comments_cache.json
 
 # Résultats des tests sur les commentaires d'exemple
 resultats_demo/
+
+# Fichiers locaux (scripts ponctuels et journaux)
+journal_commit.txt
+commit_et_valider.bat
+installer_disque_E.bat

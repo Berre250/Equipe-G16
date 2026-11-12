@@ -1,0 +1,29 @@
+﻿name,category,wiki_articles,score_v1,score_v2,diffusion_v1,diffusion_v2,stage,persistence,durable,expected,note
+dalgona coffee,Boissons et bien-être,en:Dalgona coffee,1,1,0,0,déclin,0.994,True,,Viral TikTok 2020
+hard seltzer,Boissons et bien-être,en:Hard seltzer,15,15,0,0,déclin,0.609,False,,Boom US 2019-2021
+bubble tea,Boissons et bien-être,en:Bubble tea,41,20,100,30,émergente,0.482,False,,
+oat milk,Boissons et bien-être,en:Oat milk,37,37,0,0,plateau,0.839,True,,
+kombucha,Boissons et bien-être,fr:Kombucha;en:Kombucha,59,38,100,30,plateau,0.9,True,,
+matcha,Boissons et bien-être,fr:Matcha;en:Matcha,62,41,100,30,plateau,1.754,True,,
+cold brew,Boissons et bien-être,en:Cold brew coffee,74,53,100,30,croissance,0.956,True,,
+pumpkin spice latte,Boissons et bien-être,en:Pumpkin spice latte,48,27,100,30,plateau,20.188,True,,Saisonnier
+golden milk,Boissons et bien-être,en:Turmeric,24,24,0,0,plateau,0.804,True,,Latte au curcuma
+hojicha,Boissons et bien-être,en:Hōjicha,63,42,100,30,plateau,1.419,True,,
+unicorn frappuccino,Boissons et bien-être,en:Unicorn Frappuccino,3,3,0,0,déclin,1.591,True,,Édition limitée 2017
+celery juice,Boissons et bien-être,en:Celery juice diet,38,17,100,30,émergente,0.618,False,,Mode bien-être 2019
+cannabidiol,Boissons et bien-être,en:Cannabidiol,2,2,0,0,déclin,1.07,True,,Boissons et cosmétiques au CBD
+ashwagandha,Boissons et bien-être,en:Withania somnifera,67,46,100,30,plateau,0.881,True,,Adaptogène
+adaptogènes,Boissons et bien-être,fr:Adaptogène;en:Adaptogen,27,27,0,0,plateau,1.114,True,,
+birria,Saveurs grillées,en:Birria,66,45,100,30,plateau,0.952,True,,Viral 2021
+gochujang,Saveurs grillées,fr:Gochujang;en:Gochujang,64,43,100,30,plateau,0.986,True,,
+sriracha,Saveurs grillées,en:Sriracha,81,60,100,30,croissance,0.419,False,,
+yuzu,Fruits et légumes,fr:Yuzu;en:Yuzu,69,48,100,30,plateau,0.693,False,,
+jackfruit,Fruits et légumes,en:Jackfruit,24,24,0,0,plateau,0.662,False,,Alternative à la viande
+aquafaba,Ingrédients de cuisine,en:Aquafaba,3,3,0,0,déclin,1.268,True,,Alternative vegan
+tahini,Ingrédients de cuisine,fr:Tahin;en:Tahini,64,43,100,30,plateau,1.131,True,,
+bakuchiol,Beauté et actifs,en:Bakuchiol,31,31,0,0,plateau,0.978,True,,
+niacinamide,Beauté et actifs,fr:Nicotinamide;en:Nicotinamide,28,28,0,0,plateau,0.997,True,,
+bave d'escargot,Beauté et actifs,en:Snail slime,52,31,100,30,plateau,0.539,False,,K-beauty
+acide hyaluronique,Beauté et actifs,fr:Acide hyaluronique;en:Hyaluronic acid,25,25,0,0,plateau,0.625,False,,
+oud,Parfumerie,fr:Calambac;en:Agarwood,8,8,0,0,déclin,0.897,True,,
+ambroxan,Parfumerie,en:Ambroxide,27,27,0,0,plateau,1.031,True,,

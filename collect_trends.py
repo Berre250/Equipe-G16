@@ -36,6 +36,7 @@ import json
 import math
 import os
 import re
+import ssl
 import statistics
 import sys
 import time
@@ -136,22 +137,37 @@ def parse_period(text: str) -> date | None:
     return date(int(m.group(1)), int(m.group(2)), 1) if m else None
 
 
-def http_get(url: str, timeout: int = 30, retries: int = 5) -> bytes:
+def _ssl_context():
+    """Certificats de certifi (à jour) plutôt que ceux du système : sur certains Windows, le magasin de
+    certificats est périmé et Python refuse alors Wikipedia et Google News (CERTIFICATE_VERIFY_FAILED)."""
+    try:
+        import certifi
+        return ssl.create_default_context(cafile=certifi.where())
+    except Exception:
+        return ssl.create_default_context()
+
+
+SSL_CTX = _ssl_context()
+
+
+def http_get(url: str, timeout: int = 20, retries: int = 3) -> bytes:
     last = None
     for attempt in range(retries + 1):
         wait = 1.5 * (attempt + 1)
         try:
             req = urllib.request.Request(url, headers={"User-Agent": UA})
-            with urllib.request.urlopen(req, timeout=timeout) as r:
+            with urllib.request.urlopen(req, timeout=timeout, context=SSL_CTX) as r:
                 return r.read()
         except urllib.error.HTTPError as e:
-            if e.code == 404:
+            if 400 <= e.code < 500 and e.code != 429:  # 403, 404... : réessayer ne changera rien
                 raise
             if e.code == 429:  # trop de requêtes : on attend plus longtemps
                 retry_after = e.headers.get("Retry-After", "")
                 wait = float(retry_after) if retry_after.isdigit() else 10 * (attempt + 1)
             last = e
         except Exception as e:  # réseau, timeout
+            if isinstance(getattr(e, "reason", None), ssl.SSLCertVerificationError):
+                raise  # certificat refusé : réessayer ne changera rien
             last = e
         if attempt < retries:
             time.sleep(wait)

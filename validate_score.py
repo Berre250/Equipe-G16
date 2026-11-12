@@ -93,7 +93,7 @@ def fmt(x, digits=2):
 
 # ---------------------------------------------------------------- programme principal
 def main() -> None:
-    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stdout.reconfigure(encoding="utf-8", line_buffering=True)  # progression visible même redirigée
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--cases", default="reference_cases.csv")
     ap.add_argument("--as-of", default="2023-11", help="date du score (AAAA-MM)")

@@ -3,3 +3,4 @@ uvicorn>=0.29
 ollama>=0.4
 chromadb>=1.0
 pytrends>=4.9
+certifi
