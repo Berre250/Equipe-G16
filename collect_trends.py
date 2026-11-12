@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 """Collecte de signaux de tendances pour le périmètre Givaudan et calcul d'un score explicable.
 
-Sources (aucune clé requise, bibliothèque standard uniquement) :
-  - Google Trends  : export CSV (--gt-csv, "time_series_*.csv") ou pytrends (--pytrends, optionnel)
+Sources (aucune clé requise) :
+  - Google Trends  : automatique pour chaque mot-clé.
+                     1) export CSV déjà présent dans google_trends/ (ou time_series_*.csv à la racine)
+                     2) sinon téléchargement via pytrends, enregistré dans google_trends/ (cache)
+                     3) si Google refuse (erreur 429) : exporter le CSV sur trends.google.com
+                        (France, 5 dernières années) et le déposer dans google_trends/
   - Wikipedia      : pages vues mensuelles (API Wikimedia, fr + en)
   - Google News    : flux RSS (articles sur 30 jours / 12 mois, nombre de médias distincts)
   - Signaux manuels: TikTok Creative Center, Pinterest Trends... via --manual signaux_manuels.csv
@@ -12,13 +16,16 @@ Sorties (dans --out-dir) :
   - trends_timeseries.csv : une ligne par tendance, source et mois
   - trends_summary.csv    : une ligne par tendance, avec les attributs qui servent au Swagger
 
-Score (0-100, version de départ à calibrer sur des cas passés) =
+Score V2 (0-100, à valider sur les cas de référence avec validate_score.py) =
   0,4 x évolution (croissance 12 mois et 5 ans) + 0,3 x récurrence (durée au-dessus de 40 % du pic)
-  + 0,3 x diffusion (part des sources en croissance + nombre de médias distincts sur 30 jours)
+  + 0,3 x diffusion (séries en croissance, sur au moins 2 séries, + nombre de médias distincts sur 30 jours)
+  La V1 (formule d'origine) reste disponible dans compute_score(version="v1") pour la comparaison.
 
 Usage :
   python collect_trends.py                                  # tout le bloc de mots-clés
-  python collect_trends.py --only "yuzu,matcha" --gt-csv time_series_FR.csv
+  python collect_trends.py --only "yuzu,matcha"              # met à jour ces tendances, garde les autres
+  python collect_trends.py --only "fleur d'oranger"          # nouveau mot-clé : collecté automatiquement
+  python collect_trends.py --no-pytrends                     # exports CSV seulement, sans appeler Google
   python collect_trends.py --keywords-file mes_mots_cles.csv   # name,category,wiki_fr,wiki_en,news_query
 """
 
@@ -27,6 +34,7 @@ import csv
 import glob
 import json
 import math
+import os
 import re
 import statistics
 import sys
@@ -47,8 +55,9 @@ FRUITS, GRILL, MER, CUISINE = ("Fruits et légumes", "Saveurs grillées", "Produ
                                "Ingrédients de cuisine")
 SAVEURS = FRUITS  # catégorie par défaut pour un fichier de mots-clés externe
 PARFUM, BEAUTE, BOISSONS = "Parfumerie", "Beauté et actifs", "Boissons et bien-être"
+AUTRE = "Autre"
 MARCHES = {FRUITS: "marché des fruits et légumes", GRILL: "marché des saveurs grillées",
-           MER: "marché des produits de la mer", CUISINE: "marché des ingrédients de cuisine",
+           MER: "marché des produits de la mer", CUISINE: "marché des ingrédients de cuisine", AUTRE: "marché visé",
            PARFUM: "marché de la parfumerie", BEAUTE: "marché du skincare", BOISSONS: "marché des boissons"}
 
 KEYWORDS = [
@@ -98,7 +107,17 @@ KEYWORDS = [
 
 # ---------------------------------------------------------------- paramètres du score
 W_EVOLUTION, W_RECURRENCE, W_DIFFUSION = 0.4, 0.3, 0.3
-UA = "Mozilla/5.0 (compatible; TrendScoutHackathon/0.1)"
+# V2 : une tendance n'est « diffusée » que si plusieurs séries montent. On divise donc par au moins
+# MIN_SERIES_DIFFUSION séries (Google Trends + Wikipedia, les deux sources automatiques), pour qu'une
+# tendance vue par une seule source ne puisse pas obtenir 100.
+MIN_SERIES_DIFFUSION = 2
+SCORE_VERSION = "v2"
+# Wikimedia exige un User-Agent qui identifie l'outil et un moyen de contact, sinon il peut refuser (403)
+UA = ("TrendScoutHackathon/0.2 (https://github.com/Berre250/Equipe-G16; projet étudiant HETIC) "
+      "python-urllib")
+BASE_DIR = Path(__file__).resolve().parent
+GT_DIR = os.getenv("GT_DIR", str(BASE_DIR / "google_trends"))  # exports et cache Google Trends
+DEFAULT_OUT_DIR = os.getenv("TRENDS_DIR", str(Path(__file__).resolve().parent / "resultats"))
 
 
 # ---------------------------------------------------------------- utilitaires
@@ -161,7 +180,9 @@ def wiki_monthly(lang: str, title: str, start: date, end: date) -> dict[date, fl
            f"{lang}.wikipedia/all-access/user/{art}/monthly/{start:%Y%m%d}/{end:%Y%m%d}")
     try:
         data = json.loads(http_get(url))
-    except urllib.error.HTTPError:
+    except urllib.error.HTTPError as e:
+        if e.code != 404:  # 404 = pas de données pour cette page ; le reste doit se voir
+            print(f"   wikipedia {lang}:{title} : erreur HTTP {e.code}")
         return {}
     out = {}
     for it in data.get("items", []):
@@ -171,10 +192,12 @@ def wiki_monthly(lang: str, title: str, start: date, end: date) -> dict[date, fl
     return out
 
 
-def collect_wikipedia(kw: dict, sleep: float):
+def collect_wikipedia(kw: dict, sleep: float, start: date | None = None, end: date | None = None):
+    """Pages vues mensuelles fr + en additionnées. Par défaut : les 5 dernières années."""
     total: dict[date, float] = {}
     titles = []
-    end, start = month_of(date.today()), date(date.today().year - 5, date.today().month, 1)
+    end = end or month_of(date.today())
+    start = start or date(end.year - 5, end.month, 1)
     for lang, key in (("fr", "wiki_fr"), ("en", "wiki_en")):
         title = wiki_title(lang, kw.get(key), kw["name"])
         time.sleep(sleep)
@@ -311,14 +334,209 @@ def stage_of(m: dict | None, g: float | None) -> str:
     return "plateau"
 
 
+def scaled_growth(g: float) -> float:
+    """Croissance en % ramenée entre 0 et 1 (échelle log) : 0 % -> 0, +2000 % ou plus -> 1."""
+    return min(1.0, math.log10(1 + max(g, 0) / 100) / math.log10(21))
+
+
+def compute_score(mets: dict[str, dict], primary: dict | None, news: dict | None,
+                  version: str = SCORE_VERSION) -> dict:
+    """Score de durabilité (0-100) et ses sous-scores.
+
+    mets    : métriques par source de série (google_trends, wikipedia, tiktok...)
+    primary : métriques de la série de référence (Google Trends, sinon Wikipedia)
+    news    : comptages Google News, ou None si la source n'a pas répondu
+    version : "v1" = formule d'origine (gardée pour la comparaison V1/V2), "v2" = formule corrigée
+    """
+    growths = [m["growth_12m"] for m in mets.values()]
+    g12 = statistics.mean(growths) if growths else None
+    # Évolution = moyenne de la croissance sur 12 mois (récent) et sur 5 ans (de fond)
+    evolution = (100 * (0.5 * scaled_growth(g12) + 0.5 * scaled_growth(primary["growth_5y"]))
+                 if g12 is not None and primary else 0)
+    recurrence = statistics.mean(m["recurrence"] for m in mets.values()) if mets else 0
+    rising = sum(g >= 20 for g in growths)
+    if version == "v1":
+        # Défaut corrigé en V2 : 1 seule source en hausse et pas de Google News -> diffusion = 100
+        frac = rising / len(growths) if growths else 0
+        pub_part = min(1.0, news["publishers_30d"] / 15) if news else None
+        diffusion = 100 * (0.6 * frac + 0.4 * pub_part) if pub_part is not None else 100 * frac
+    else:
+        # Une seule série ne peut pas prouver une diffusion, et l'absence de presse compte pour 0
+        frac = rising / max(len(growths), MIN_SERIES_DIFFUSION) if growths else 0
+        pub_part = min(1.0, news["publishers_30d"] / 15) if news else 0.0
+        diffusion = 100 * (0.6 * frac + 0.4 * pub_part)
+    score = round(W_EVOLUTION * evolution + W_RECURRENCE * recurrence + W_DIFFUSION * diffusion)
+    return dict(score=score, g12=g12, evolution=evolution, recurrence=recurrence, diffusion=diffusion)
+
+
+def series_metrics(series: dict[str, dict[date, float]]) -> tuple[dict, dict, dict | None]:
+    """Normalise chaque série, calcule ses métriques et choisit la série de référence."""
+    mets, norm_by_src = {}, {}
+    for src, s in series.items():
+        sn = normalize(s)
+        if not sn:
+            continue
+        norm_by_src[src] = sn
+        m = metrics(sn)
+        if m:
+            mets[src] = m
+    # Série de référence : Google Trends, sinon Wikipedia, sinon un signal manuel
+    primary = next((mets[s] for s in ("google_trends", "wikipedia") if s in mets),
+                   next(iter(mets.values()), None))
+    return mets, norm_by_src, primary
+
+
 def recommendation(score: float, stage: str, category: str, confidence: str) -> str:
     if score >= 75 and stage in ("croissance", "émergente"):
-        text = f"Opportunité forte pour le {MARCHES[category]}"
+        text = f"Opportunité forte pour le {MARCHES.get(category, 'marché ' + category.lower())}"
     elif score >= 50:
         text = "À surveiller : signal prometteur, à confirmer avec d'autres sources"
     else:
         text = "Signal faible : pas de lancement de produit pour l'instant"
     return text + (" (confiance basse)" if confidence == "basse" else "")
+
+
+# ---------------------------------------------------------------- collecte d'une tendance
+def save_gt_cache(name: str, series: dict[date, float], folder: str = GT_DIR) -> Path:
+    """Enregistre une courbe Google Trends au format des exports du site (réutilisée aux lancements suivants)."""
+    d = Path(folder)
+    d.mkdir(parents=True, exist_ok=True)
+    path = d / f"time_series_FR_{slug(name)}.csv"
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f, quoting=csv.QUOTE_ALL)
+        w.writerow(["Time", name])
+        for p in sorted(series):
+            w.writerow([p.isoformat(), round(series[p], 2)])
+    return path
+
+
+def load_tiktok_signals(out_dir=DEFAULT_OUT_DIR) -> dict[str, dict]:
+    """Résultats de comment_analyzer.py (analyse des commentaires TikTok), par trend_id."""
+    path = Path(out_dir) / "tiktok_signals.csv"
+    if not path.exists():
+        return {}
+    with open(path, encoding="utf-8-sig", newline="") as f:
+        return {r["trend_id"]: r for r in csv.DictReader(f)}
+
+
+def collect_one(kw: dict, gt: dict, manual: dict, use_pytrends: bool = True, sleep: float = 1.0,
+                log=print, tiktok: dict | None = None) -> tuple[list[dict], dict]:
+    """Collecte toutes les sources d'une tendance et calcule son score.
+
+    Retourne (lignes de trends_timeseries.csv, ligne de trends_summary.csv).
+    Google Trends : export CSV s'il existe, sinon téléchargement automatique (pytrends), mis en cache
+    dans google_trends/ pour ne plus le redemander à Google.
+    """
+    name, sid = kw["name"], slug(kw["name"])
+    series: dict[str, dict[date, float]] = {}
+    wiki_titles, news = [], None
+
+    if sid in gt:
+        series["google_trends"] = gt[sid]
+    elif use_pytrends:
+        try:
+            s = collect_pytrends(name)
+            if s:
+                series["google_trends"] = s
+                gt[sid] = s
+                log(f"   google_trends : téléchargé et mis en cache ({save_gt_cache(name, s)})")
+            else:
+                log("   google_trends : aucune donnée pour ce mot-clé")
+        except ImportError:
+            log("   google_trends : pytrends n'est pas installé (pip install pytrends)")
+        except Exception as e:
+            log(f"   google_trends indisponible : {e}. Solution : exporter le CSV depuis "
+                f"trends.google.com et le déposer dans {GT_DIR}")
+    for (k, src), s in manual.items():
+        if k == sid:
+            series[src] = s
+    try:
+        s, wiki_titles = collect_wikipedia(kw, sleep)
+        if s:
+            series["wikipedia"] = s
+        else:
+            log("   wikipedia : aucune page trouvée")
+    except Exception as e:
+        log(f"   wikipedia indisponible : {e}")
+    try:
+        news = collect_news(kw, sleep)
+    except Exception as e:
+        log(f"   google_news indisponible : {e}")
+
+    mets, norm_by_src, primary = series_metrics(series)
+    ts_rows = []
+    for src, sn in norm_by_src.items():
+        s = series[src]
+        for p in sorted(s):
+            ts_rows.append(dict(trend_id=sid, trend_name=name, category=kw["category"], source=src,
+                                period=p.isoformat(), value=round(s[p], 2), value_norm=round(sn[p], 1)))
+
+    res = compute_score(mets, primary, news)
+    score, g12 = res["score"], res["g12"]
+    sources = sorted(norm_by_src) + (["google_news"] if news and news["articles_365d"] > 0 else [])
+    confidence = "élevée" if len(sources) >= 3 else "moyenne" if len(sources) == 2 else "basse"
+    stage = stage_of(primary, g12)
+    if primary is None:  # aucune courbe : on ne peut pas juger la tendance, on le dit clairement
+        confidence = "basse"
+        reco = ("Données insuffisantes : aucune courbe disponible, score non interprétable "
+                "(ajouter un export Google Trends)")
+    else:
+        reco = recommendation(score, stage, kw["category"], confidence)
+    # Commentaires TikTok : ils ne changent pas le score (validé sans eux) mais nuancent la recommandation
+    tk = (tiktok or {}).get(sid, {})
+    if tk.get("verdict", "").startswith("buzz moqueur"):
+        reco += " ; attention : sur TikTok, la viralité est surtout moqueuse"
+    elif tk.get("verdict", "").startswith("engouement sincère"):
+        reco += " ; sur TikTok : engouement sincère avec intention d'achat"
+    early = [statistics.mean(sorted(sn.items())[j][1] for j in range(-3, 0))
+             for src, sn in norm_by_src.items() if src in ("tiktok", "pinterest") and len(sn) >= 3]
+    row = dict(
+        trend_id=sid, trend_name=name, category=kw["category"], score=score,
+        growth_5y=round(primary["growth_5y"]) if primary else "",
+        growth_12m=round(g12) if g12 is not None else "",
+        evolution_score=round(res["evolution"]), recurrence_score=round(res["recurrence"]),
+        diffusion_score=round(res["diffusion"]),
+        early_signal_score=round(statistics.mean(early)) if early else "",
+        stage=stage, confidence=confidence,
+        sources=";".join(sources), n_sources=len(sources),
+        news_articles_30d=news["articles_30d"] if news else "",
+        news_publishers_30d=news["publishers_30d"] if news else "",
+        news_articles_365d=news["articles_365d"] if news else "",
+        peak_period=primary["peak_period"].isoformat() if primary else "",
+        data_points=primary["points"] if primary else 0,
+        wiki_articles=";".join(wiki_titles),
+        recommendation=reco,
+        tiktok_comments=tk.get("n_comments", ""), tiktok_authenticity=tk.get("authenticity_score", ""),
+        tiktok_moquerie_pct=tk.get("moquerie_pct", ""), tiktok_intention_pct=tk.get("intention_pct", ""),
+        tiktok_verdict=tk.get("verdict", ""),
+        collected_at=date.today().isoformat(), score_version=SCORE_VERSION,
+    )
+    log(f"   score={score} stade={stage} sources={','.join(sources) or 'aucune'}")
+    return ts_rows, row
+
+
+def save_results(out_dir, ts_rows: list[dict], summary: list[dict]) -> Path:
+    """Fusionne avec les résultats existants : les tendances recollectées sont remplacées, les autres gardées."""
+    out = Path(out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    updated = {r["trend_id"] for r in summary}
+    for fname, rows in (("trends_timeseries.csv", ts_rows), ("trends_summary.csv", summary)):
+        path = out / fname
+        old = []
+        if path.exists():
+            with open(path, encoding="utf-8-sig", newline="") as f:
+                old = [r for r in csv.DictReader(f) if r.get("trend_id") not in updated]
+        merged = old + rows
+        if not merged:
+            continue
+        fields = list(rows[0]) if rows else list(merged[0])
+        tmp = path.with_suffix(".tmp")
+        with open(tmp, "w", newline="", encoding="utf-8-sig") as f:
+            w = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore", restval="")
+            w.writeheader()
+            w.writerows(merged)
+        tmp.replace(path)  # écriture atomique : l'API ne lit jamais un fichier à moitié écrit
+    return out
 
 
 # ---------------------------------------------------------------- programme principal
@@ -332,124 +550,58 @@ def load_keywords(path: str | None, only: str | None) -> list[dict]:
                             news_query=r.get("news_query") or r["name"]))
     if only:
         wanted = {slug(x) for x in only.split(",")}
-        kws = [k for k in kws if slug(k["name"]) in wanted]
+        known = [k for k in kws if slug(k["name"]) in wanted]
+        # mot-clé absent du bloc : on le collecte quand même (recherche Wikipedia automatique)
+        found = {slug(k["name"]) for k in known}
+        extra = [dict(name=x.strip(), category=AUTRE, wiki_fr=None, wiki_en=None, news_query=x.strip())
+                 for x in only.split(",") if x.strip() and slug(x) not in found]
+        kws = known + extra
     return kws
+
+
+def gt_patterns(extra: list[str] | None) -> list[str]:
+    """Exports Google Trends lus automatiquement : dossier google_trends/ + racine du projet."""
+    return [str(Path(GT_DIR) / "*.csv"), str(BASE_DIR / "time_series_*.csv"), "time_series_*.csv"] + (extra or [])
 
 
 def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--keywords-file")
-    ap.add_argument("--only", help="liste de mots-clés séparés par des virgules")
-    ap.add_argument("--gt-csv", action="append", default=None, help="export(s) Google Trends (glob accepté)")
+    ap.add_argument("--only", help="liste de mots-clés séparés par des virgules (nouveaux mots acceptés)")
+    ap.add_argument("--gt-csv", action="append", default=None,
+                    help=f"export(s) Google Trends en plus de {GT_DIR} (glob accepté)")
     ap.add_argument("--manual", default="signaux_manuels.csv")
-    ap.add_argument("--pytrends", action="store_true", help="essayer pytrends pour les mots-clés sans CSV")
-    ap.add_argument("--out-dir", default=".")
+    ap.add_argument("--no-pytrends", action="store_true",
+                    help="ne pas télécharger Google Trends automatiquement (exports CSV seulement)")
+    # Même dossier par défaut que trends_api.py (resultats/ à côté du script, ou variable TRENDS_DIR)
+    ap.add_argument("--out-dir", default=DEFAULT_OUT_DIR,
+                    help=f"dossier de sortie, lu ensuite par trends_api.py (défaut : {DEFAULT_OUT_DIR})")
     ap.add_argument("--sleep", type=float, default=1.0, help="pause entre requêtes (secondes)")
     args = ap.parse_args()
 
     kws = load_keywords(args.keywords_file, args.only)
     if not kws:
         sys.exit("Aucun mot-clé à traiter.")
-    gt = read_gt_csvs(args.gt_csv or ["time_series_*.csv"])
+    gt = read_gt_csvs(gt_patterns(args.gt_csv))
     manual = read_manual(args.manual)
-    today = date.today().isoformat()
+    tiktok = load_tiktok_signals(args.out_dir)
+    if tiktok:
+        print(f"Commentaires TikTok analysés pour : {', '.join(r['trend_name'] for r in tiktok.values())}")
     ts_rows, summary = [], []
 
     for i, kw in enumerate(kws, 1):
-        name, sid = kw["name"], slug(kw["name"])
-        print(f"[{i}/{len(kws)}] {name}")
-        series: dict[str, dict[date, float]] = {}
-        wiki_titles, news = [], None
+        print(f"[{i}/{len(kws)}] {kw['name']}")
+        had_gt = slug(kw["name"]) in gt
+        rows, row = collect_one(kw, gt, manual, use_pytrends=not args.no_pytrends, sleep=args.sleep,
+                                tiktok=tiktok)
+        ts_rows += rows
+        summary.append(row)
+        time.sleep(args.sleep + (8 if not had_gt and not args.no_pytrends else 0))  # Google Trends limite le débit
 
-        if sid in gt:
-            series["google_trends"] = gt[sid]
-        elif args.pytrends:
-            try:
-                s = collect_pytrends(name)
-                if s:
-                    series["google_trends"] = s
-                time.sleep(8)
-            except Exception as e:
-                print(f"   google_trends (pytrends) indisponible : {e}")
-        for (k, src), s in manual.items():
-            if k == sid:
-                series[src] = s
-        try:
-            s, wiki_titles = collect_wikipedia(kw, args.sleep)
-            if s:
-                series["wikipedia"] = s
-        except Exception as e:
-            print(f"   wikipedia indisponible : {e}")
-        try:
-            news = collect_news(kw, args.sleep)
-        except Exception as e:
-            print(f"   google_news indisponible : {e}")
-        time.sleep(args.sleep)
-
-        mets, norm_by_src = {}, {}
-        for src, s in series.items():
-            sn = normalize(s)
-            if not sn:
-                continue
-            norm_by_src[src] = sn
-            for p in sorted(s):
-                ts_rows.append(dict(trend_id=sid, trend_name=name, category=kw["category"], source=src,
-                                    period=p.isoformat(), value=round(s[p], 2), value_norm=round(sn[p], 1)))
-            m = metrics(sn)
-            if m:
-                mets[src] = m
-
-        # Série de référence : Google Trends, sinon Wikipedia, sinon un signal manuel
-        primary = next((mets[s] for s in ("google_trends", "wikipedia") if s in mets),
-                       next(iter(mets.values()), None))
-        growths = [m["growth_12m"] for m in mets.values()]
-        g12 = statistics.mean(growths) if growths else None
-        def scaled(g):  # 0 % -> 0, +2000 % ou plus -> 100
-            return min(1.0, math.log10(1 + max(g, 0) / 100) / math.log10(21))
-        # Évolution = moyenne de la croissance sur 12 mois (récent) et sur 5 ans (de fond)
-        evolution = 100 * (0.5 * scaled(g12) + 0.5 * scaled(primary["growth_5y"])) if g12 is not None and primary else 0
-        recurrence = statistics.mean(m["recurrence"] for m in mets.values()) if mets else 0
-        frac = (sum(g >= 20 for g in growths) / len(growths)) if growths else 0
-        pub_part = min(1.0, news["publishers_30d"] / 15) if news else None
-        diffusion = 100 * (0.6 * frac + 0.4 * pub_part) if pub_part is not None else 100 * frac
-        score = round(W_EVOLUTION * evolution + W_RECURRENCE * recurrence + W_DIFFUSION * diffusion)
-
-        sources = sorted(norm_by_src) + (["google_news"] if news and news["articles_365d"] > 0 else [])
-        confidence = "élevée" if len(sources) >= 3 else "moyenne" if len(sources) == 2 else "basse"
-        stage = stage_of(primary, g12)
-        early = [statistics.mean(sorted(sn.items())[j][1] for j in range(-3, 0))
-                 for src, sn in norm_by_src.items() if src in ("tiktok", "pinterest") and len(sn) >= 3]
-        summary.append(dict(
-            trend_id=sid, trend_name=name, category=kw["category"], score=score,
-            growth_5y=round(primary["growth_5y"]) if primary else "",
-            growth_12m=round(g12) if g12 is not None else "",
-            evolution_score=round(evolution), recurrence_score=round(recurrence),
-            diffusion_score=round(diffusion),
-            early_signal_score=round(statistics.mean(early)) if early else "",
-            stage=stage, confidence=confidence,
-            sources=";".join(sources), n_sources=len(sources),
-            news_articles_30d=news["articles_30d"] if news else "",
-            news_publishers_30d=news["publishers_30d"] if news else "",
-            news_articles_365d=news["articles_365d"] if news else "",
-            peak_period=primary["peak_period"].isoformat() if primary else "",
-            data_points=primary["points"] if primary else 0,
-            wiki_articles=";".join(wiki_titles),
-            recommendation=recommendation(score, stage, kw["category"], confidence),
-            collected_at=today,
-        ))
-        print(f"   score={score} stade={stage} sources={','.join(sources) or 'aucune'}")
-
-    out = Path(args.out_dir)
-    out.mkdir(parents=True, exist_ok=True)
-    for fname, rows in (("trends_timeseries.csv", ts_rows), ("trends_summary.csv", summary)):
-        if rows:
-            with open(out / fname, "w", newline="", encoding="utf-8-sig") as f:
-                w = csv.DictWriter(f, fieldnames=list(rows[0]))
-                w.writeheader()
-                w.writerows(rows)
-    print(f"\nÉcrit : {out / 'trends_summary.csv'} ({len(summary)} tendances), "
-          f"{out / 'trends_timeseries.csv'} ({len(ts_rows)} lignes)")
+    out = save_results(args.out_dir, ts_rows, summary)
+    print(f"\nÉcrit : {out / 'trends_summary.csv'} ({len(summary)} tendances mises à jour), "
+          f"{out / 'trends_timeseries.csv'}")
 
 
 if __name__ == "__main__":

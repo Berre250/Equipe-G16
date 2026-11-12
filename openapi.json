@@ -253,7 +253,7 @@
           "tendances"
         ],
         "summary": "Score",
-        "description": "Score d'une tendance à partir de son nom : c'est l'appel principal pour l'application.",
+        "description": "Score d'une tendance à partir de son nom : c'est l'appel principal pour l'application.\n\nSi la tendance n'a jamais été collectée et que `auto_collect` vaut true, elle est collectée\nà la demande (Google Trends en cache dans google_trends/), puis ajoutée aux résultats.",
         "operationId": "score_trends_score_post",
         "requestBody": {
           "content": {
@@ -354,6 +354,27 @@
             "examples": [
               "peptide serum"
             ]
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category",
+            "description": "Univers Givaudan, utilisé si la tendance est nouvelle",
+            "examples": [
+              "Beauté et actifs"
+            ]
+          },
+          "auto_collect": {
+            "type": "boolean",
+            "title": "Auto Collect",
+            "description": "Si la tendance est inconnue, la collecter automatiquement (Google Trends, Wikipedia, Google News). Prend de 10 s à 1 min.",
+            "default": true
           }
         },
         "type": "object",
@@ -433,6 +454,35 @@
             "title": "Confidence",
             "examples": [
               "moyenne"
+            ]
+          },
+          "tiktok_authenticity": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tiktok Authenticity",
+            "description": "Voir TrendSummary",
+            "examples": [
+              78
+            ]
+          },
+          "tiktok_verdict": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tiktok Verdict",
+            "examples": [
+              "engouement sincère avec intention d'achat"
             ]
           }
         },
@@ -733,6 +783,82 @@
             "title": "Recommendation",
             "examples": [
               "À surveiller : signal prometteur, à confirmer avec d'autres sources"
+            ]
+          },
+          "tiktok_comments": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tiktok Comments",
+            "description": "Commentaires TikTok analysés (comment_analyzer.py)",
+            "examples": [
+              420
+            ]
+          },
+          "tiktok_authenticity": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 100.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tiktok Authenticity",
+            "description": "Part des avis sincèrement positifs (appréciation + intention d'achat) parmi les commentaires qui donnent un avis",
+            "examples": [
+              78
+            ]
+          },
+          "tiktok_moquerie_pct": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tiktok Moquerie Pct",
+            "description": "Part des commentaires moqueurs ou ironiques (%)",
+            "examples": [
+              9
+            ]
+          },
+          "tiktok_intention_pct": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tiktok Intention Pct",
+            "description": "Part des commentaires avec intention d'achat ou d'essai (%)",
+            "examples": [
+              21
+            ]
+          },
+          "tiktok_verdict": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tiktok Verdict",
+            "examples": [
+              "engouement sincère avec intention d'achat"
             ]
           },
           "collected_at": {

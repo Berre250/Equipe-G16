@@ -1,6 +1,7 @@
 """API de la brique Data : tendances émergentes et score de durabilité (périmètre Givaudan).
 
-Lit les CSV produits par collect_trends.py (dossier `resultats/`, ou TRENDS_DIR).
+Lit les CSV produits par collect_trends.py (dossier `resultats/`, ou TRENDS_DIR) : c'est le même
+dossier par défaut que celui où collect_trends.py écrit.
 
 Lancement :
     python trends_api.py            # http://127.0.0.1:8001  (Swagger : /docs)
@@ -18,7 +19,10 @@ from pathlib import Path
 from typing import Literal
 
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field
+
+import collect_trends as ct
 
 DATA_DIR = Path(os.getenv("TRENDS_DIR", Path(__file__).resolve().parent / "resultats"))
 SOURCE_LABELS = {"google_trends": "Google Trends", "wikipedia": "Wikipedia", "google_news": "Google News",
@@ -57,12 +61,26 @@ class TrendSummary(BaseModel):
     data_points: int = Field(description="Nombre de mois de données", examples=[61])
     wiki_articles: list[str] = Field(description="Articles Wikipedia utilisés (langue:titre)", examples=[[]])
     recommendation: str = Field(examples=["À surveiller : signal prometteur, à confirmer avec d'autres sources"])
+    tiktok_comments: int | None = Field(None, description="Commentaires TikTok analysés (comment_analyzer.py)",
+                                        examples=[420])
+    tiktok_authenticity: int | None = Field(None, ge=0, le=100, description="Part des avis sincèrement positifs "
+                                            "(appréciation + intention d'achat) parmi les commentaires qui donnent "
+                                            "un avis", examples=[78])
+    tiktok_moquerie_pct: int | None = Field(None, description="Part des commentaires moqueurs ou ironiques (%)",
+                                            examples=[9])
+    tiktok_intention_pct: int | None = Field(None, description="Part des commentaires avec intention d'achat ou "
+                                             "d'essai (%)", examples=[21])
+    tiktok_verdict: str | None = Field(None, examples=["engouement sincère avec intention d'achat"])
     collected_at: str = Field(description="Date de la collecte", examples=["2026-11-12"])
 
 
 class ScoreRequest(BaseModel):
     trend_name: str = Field(min_length=1, description="Nom de la tendance (casse et accents ignorés)",
                             examples=["peptide serum"])
+    category: str | None = Field(None, description="Univers Givaudan, utilisé si la tendance est nouvelle",
+                                 examples=["Beauté et actifs"])
+    auto_collect: bool = Field(True, description="Si la tendance est inconnue, la collecter automatiquement "
+                               "(Google Trends, Wikipedia, Google News). Prend de 10 s à 1 min.")
 
 
 class ScoreResponse(BaseModel):
@@ -74,6 +92,8 @@ class ScoreResponse(BaseModel):
     recommendation: str = Field(examples=["À surveiller : signal prometteur, à confirmer avec d'autres sources"])
     stage: Stage = Field(examples=["plateau"])
     confidence: Confidence = Field(examples=["moyenne"])
+    tiktok_authenticity: int | None = Field(None, description="Voir TrendSummary", examples=[78])
+    tiktok_verdict: str | None = Field(None, examples=["engouement sincère avec intention d'achat"])
 
 
 class TimeseriesPoint(BaseModel):
@@ -125,7 +145,10 @@ def _trend(r: dict) -> TrendSummary:
         news_articles_30d=_int(r["news_articles_30d"]), news_publishers_30d=_int(r["news_publishers_30d"]),
         news_articles_365d=_int(r["news_articles_365d"]), peak_period=r["peak_period"] or None,
         data_points=_int(r["data_points"]), wiki_articles=[w for w in r["wiki_articles"].split(";") if w],
-        recommendation=r["recommendation"], collected_at=r["collected_at"])
+        recommendation=r["recommendation"], collected_at=r["collected_at"],
+        tiktok_comments=_int(r.get("tiktok_comments")), tiktok_authenticity=_int(r.get("tiktok_authenticity")),
+        tiktok_moquerie_pct=_int(r.get("tiktok_moquerie_pct")),
+        tiktok_intention_pct=_int(r.get("tiktok_intention_pct")), tiktok_verdict=r.get("tiktok_verdict") or None)
 
 
 def _find(name: str) -> TrendSummary:
@@ -146,6 +169,23 @@ app = FastAPI(
                 "(TikTok, Pinterest). Les données sont recalculées par `collect_trends.py`.",
     version="1.0.0",
 )
+
+
+@app.get("/", include_in_schema=False)
+def root():
+    """La racine renvoie vers le Swagger."""
+    return RedirectResponse("/docs")
+
+
+def _collect(name: str, category: str | None) -> TrendSummary:
+    """Collecte une nouvelle tendance à la demande et l'ajoute aux résultats."""
+    gt = ct.read_gt_csvs(ct.gt_patterns(None))
+    kw = dict(name=name.strip(), category=category or ct.AUTRE, wiki_fr=None, wiki_en=None,
+              news_query=name.strip())
+    rows, row = ct.collect_one(kw, gt, ct.read_manual(str(ct.BASE_DIR / "signaux_manuels.csv")), sleep=0.3,
+                               tiktok=ct.load_tiktok_signals(DATA_DIR))
+    ct.save_results(DATA_DIR, rows, [row])
+    return _find(name)
 
 
 @app.get("/health", response_model=Health, tags=["système"])
@@ -190,11 +230,20 @@ def get_timeseries(trend_id: str, source: str | None = Query(None, examples=["go
 
 @app.post("/trends/score", response_model=ScoreResponse, tags=["tendances"])
 def score(req: ScoreRequest):
-    """Score d'une tendance à partir de son nom : c'est l'appel principal pour l'application."""
-    t = _find(req.trend_name)
+    """Score d'une tendance à partir de son nom : c'est l'appel principal pour l'application.
+
+    Si la tendance n'a jamais été collectée et que `auto_collect` vaut true, elle est collectée
+    à la demande (Google Trends en cache dans google_trends/), puis ajoutée aux résultats."""
+    try:
+        t = _find(req.trend_name)
+    except HTTPException as e:
+        if not req.auto_collect or e.status_code not in (404, 503):
+            raise
+        t = _collect(req.trend_name, req.category)
     return ScoreResponse(trend_name=t.trend_name, score=t.score, growth_5y=t.growth_5y,
                          source="; ".join(t.sources), recommendation=t.recommendation,
-                         stage=t.stage, confidence=t.confidence)
+                         stage=t.stage, confidence=t.confidence,
+                         tiktok_authenticity=t.tiktok_authenticity, tiktok_verdict=t.tiktok_verdict)
 
 
 if __name__ == "__main__":

@@ -20,3 +20,10 @@ __pycache__/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Exports bruts des commentaires TikTok : ils contiennent des pseudos (RGPD), ne jamais les committer
+tiktok_comments/
+resultats/comments_cache.json
+
+# Résultats des tests sur les commentaires d'exemple
+resultats_demo/
