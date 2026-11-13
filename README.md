@@ -15,8 +15,10 @@ durabilité de 0 à 100**, un **stade** (émergente, croissance, plateau, décli
 | `comment_analyzer.py` | Classe les commentaires TikTok (appréciation, moquerie, intention d'achat…) avec un LLM local. Écrit `resultats/tiktok_signals.csv`. |
 | `ia_enrichir.py` | **IA locale** (`qwen2.5:7b` via Ollama) : rédige pour chaque tendance l'explication du score et la recommandation d'arôme. Écrit `resultats/ia_enrichissement.json`. |
 | `catalogue_aromes.csv`, `catalogue.py` | Catalogue Givaudan **simulé** (26 arômes : prix, disponibilité, délai, risque de récolte) et choix de l'arôme et des alternatives pour une tendance. |
+| `exporter_sql_tech.py` | Met nos vrais résultats au format de la base du prototype Tech : écrit `resultats/integration_tech.sql` (scores, critères, courbes 60 mois, explications de l'IA). |
 | `exporter_radar.py` | Exporte tout dans `resultats/radar.json` (tendances, courbes, textes de l'IA, arômes, catalogue) pour le prototype Tech, sans serveur. |
 | `validate_score.py` | Validation du score sur les 30 cas de `reference_cases.csv` et comparaison V1 / V2. |
+| `workflow_orange.ows`, `resultats/orange_validation.csv` | Workflow **Orange** de la validation : qualité des données, nuage de points score / niveau, régression logistique évaluée en leave-one-out. Ouvrir le `.ows` dans Orange (le fichier de données est retrouvé à côté). |
 | `reference_cases.csv` | Les 30 cas de référence. La colonne `expected` est à remplir avec Product (`durable` / `passagère`). |
 | `google_trends/` | Courbes Google Trends (exports manuels et cache automatique). |
 | `exemples/commentaires_demo.csv` | 20 commentaires **inventés** pour tester le classement, ce ne sont pas des données réelles. |
@@ -24,6 +26,23 @@ durabilité de 0 à 100**, un **stade** (émergente, croissance, plateau, décli
 | `time_series_FR_*.csv` | Premier export Google Trends (France, 5 ans). |
 | `swagger.json` | Réponse factice de la Gate 1 (mardi). |
 | `api.py`, `rag.py`, `ingest.py`, `story.txt`… | Assistant en langage courant sur les tendances (voir en bas). |
+
+## Sources de données
+
+| Source | Ce qu'elle mesure | Accès | Historique |
+|---|---|---|---|
+| Google Trends (France) | Intérêt de recherche mensuel, indice relatif 0-100 (100 = pic de la période) | Export CSV manuel, ou `pytrends` (bibliothèque non officielle, limitée en débit) ; cache dans `google_trends/` (34 courbes) | 5 ans |
+| Wikipedia (fr + en) | Pages vues mensuelles des articles liés à la tendance | API publique Wikimedia, sans clé | depuis 2015 : c'est la seule source utilisable pour la validation historique |
+| Google News (fr) | Articles et médias distincts sur 30 jours et 12 mois | Flux RSS public, sans clé | pas d'historique |
+
+**Qualité des données**
+- Google Trends est un indice relatif : on ne peut pas comparer le volume de deux tendances, seulement leur évolution. Les faibles intérêts sont arrondis à 0.
+- Mots-clés ambigus : « ube » renvoyait vers l'entreprise japonaise UBE (corrigé : article *Dioscorea alata*). 7 tendances n'ont pas d'article Wikipedia fiable et sont calculées sans cette source.
+- Google News plafonne à 100 articles par requête : `news_articles_365d` est un minimum.
+- Le trafic global de Wikipedia baisse doucement depuis quelques années, ce qui tire toutes les courbes vers le bas.
+- Sur ce PC, le magasin de certificats Windows était périmé et bloquait Wikipedia et Google News : corrigé en utilisant les certificats de `certifi`.
+
+**Solutions de repli** : TikTok, Instagram et Pinterest n'ont pas d'API ouverte (réservée aux chercheurs). Nous les remplaçons par Wikipedia (curiosité du public) et Google News (diffusion médiatique). Des signaux manuels peuvent être ajoutés dans `signaux_manuels.csv`. Pour TikTok, une collecte de commentaires via Apify reste possible en extension, avec anonymisation (pseudos masqués, auteurs supprimés, identifiant de vidéo haché).
 
 ## Reproduire les résultats
 
@@ -38,6 +57,7 @@ python exporter_radar.py               # 4. resultats/radar.json pour le prototy
 python trends_api.py                   # 5. API sur http://127.0.0.1:8001 (Swagger)
 python validate_score.py               # 6. validation du score -> resultats/validation_report.md
 python comment_analyzer.py --validate labels.csv --baseline   # 7. validation des commentaires (V1/V2)
+python exporter_sql_tech.py            # 8. resultats/integration_tech.sql pour la base du prototype Tech
 ```
 
 L'étape 1 est facultative : sans commentaires, le score et l'API fonctionnent normalement.
@@ -111,6 +131,12 @@ production, Givaudan devrait passer par un fournisseur de données sous licence.
 - **Avec l'API** : `GET /trends`, `GET /trends/{id}`, `GET /trends/{id}/timeseries`,
   `GET /trends/{id}/aromes`, `GET /catalogue`, `POST /trends/score` (voir `openapi.json`).
 
+- **Intégré au prototype (fait)** : `resultats/integration_tech.sql` remplace les données simulées du
+  prototype par nos vrais résultats pour 7 tendances (yuzu, sérum aux peptides, matcha, pistache,
+  kombucha, chocolat de Dubaï, ube), avec les explications de notre IA. Tech l'a intégré dans
+  `db/init/003-donnees-reelles.sql` (PR #28 du dépôt hackathon-app) et a fixé ses seuils sur notre
+  validation (≥ 35 = durable).
+
 ## Rôle de l'IA
 
 | Usage | Script | Ce que fait l'IA | Ce qu'elle ne fait pas |
@@ -151,6 +177,13 @@ naïve** (niveau actuel / pic). Le score résume bien où en est une tendance da
 pas encore au-delà. La première définition (niveau à 80 % du niveau actuel) donnait une AUC de 0,53 :
 elle comptait les modes déjà mortes (dalgona coffee) comme durables. Détail : `resultats/validation_report.md`.
 `python validate_score.py --offline` refait le calcul à l'identique sans réseau.
+
+**Contrôle avec Orange** (`workflow_orange.ows`) : une régression logistique évaluée en leave-one-out
+sur les 28 cas donne une AUC de 0,88 avec le seul score V2 (0,86 avec toutes les variables) et 79 % de
+bons classements, cohérent avec les 0,90 de `validate_score.py`.
+
+**28 cas sur 30** : le script écarte automatiquement les cas sans assez de données Wikipedia sur la
+période (au moins 15 mois avant novembre 2023 et 6 mois après). Le poke bowl et le bol d'açaí sont dans ce cas.
 
 ## Limites et biais
 
